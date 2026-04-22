@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>StudyVerse — Learn Anything</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: #07080d; color: #e8eaf0; font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: #07080d; }
+  ::-webkit-scrollbar-thumb { background: #2a2d3a; border-radius: 3px; }
+  @keyframes fadeInDown { from{opacity:0;transform:translateY(-12px);}to{opacity:1;transform:translateY(0);} }
+  @keyframes slideUp    { from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:translateY(0);} }
+  @keyframes fadeIn     { from{opacity:0;}to{opacity:1;} }
+  @keyframes gradMove   { 0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;} }
+  @keyframes pulse      { 0%,100%{transform:scale(1);}50%{transform:scale(1.05);} }
+  .anim-a { animation: fadeInDown .7s ease both; }
+  .anim-b { animation: slideUp .8s ease .1s both; }
+  .anim-c { animation: slideUp .8s ease .25s both; }
+  .anim-d { animation: slideUp .8s ease .4s both; }
+  .cat-card { transition: transform .28s ease, box-shadow .28s ease !important; }
+  .cat-card:hover { transform: translateY(-7px) scale(1.02) !important; }
+  .cat-card:hover .glow { opacity: 1 !important; }
+  .btn-p {
+    display:inline-flex;align-items:center;justify-content:center;
+    padding:.85rem 2rem;border-radius:10px;border:none;cursor:pointer;
+    font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;color:#fff;
+    background:linear-gradient(135deg,#818cf8,#38bdf8,#34d399);
+    background-size:200% 200%;animation:gradMove 4s ease infinite;
+    box-shadow:0 0 28px rgba(129,140,248,.4);transition:opacity .2s,transform .2s;
+  }
+  .btn-p:hover{opacity:.88;transform:scale(1.03);}
+  .btn-g {
+    display:inline-flex;align-items:center;justify-content:center;
+    padding:.8rem 2rem;border-radius:10px;cursor:pointer;
+    font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;color:#e8eaf0;
+    background:transparent;border:1px solid rgba(255,255,255,.15);
+    transition:background .2s,border-color .2s;
+  }
+  .btn-g:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.3);}
+  input,button{font-family:'DM Sans',sans-serif;}
+  input{width:100%;padding:.8rem 1rem;border-radius:10px;font-size:.9rem;outline:none;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#e8eaf0;}
+  input::placeholder{color:#555868;}
+  input:focus{border-color:rgba(129,140,248,.5);box-shadow:0 0 0 3px rgba(129,140,248,.12);}
+  #sc{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.55;}
+  .page{position:relative;z-index:1;}
+  .opt{width:100%;padding:1rem 1.2rem;border-radius:12px;border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.04);color:#e8eaf0;text-align:left;font-size:.93rem;font-weight:500;
+    cursor:pointer;display:flex;align-items:center;gap:.8rem;transition:background .2s,border-color .2s;
+    font-family:'DM Sans',sans-serif;}
+  .opt:hover:not(:disabled){background:rgba(255,255,255,.09);}
+  .opt:disabled{cursor:default;}
+</style>
+</head>
+<body>
+<canvas id="sc"></canvas>
+<div id="root"></div>
+<script type="text/babel">
+const{useState,useEffect}=React;
+
+const CATS=[
+  {id:"history",    name:"History",     parent:"Humanities",       icon:"🏛️",color:"#c8a96e",bg:"#120f05",desc:"Explore civilizations, empires, revolutions and the forces that shaped humanity.",         topics:["Ancient Rome","World War II","The Renaissance","Cold War","Egyptian Civilization"]},
+  {id:"philosophy", name:"Philosophy",  parent:"Humanities",       icon:"🧠",color:"#a78bfa",bg:"#0e0c18",desc:"Question existence, ethics, knowledge and the nature of reality itself.",                   topics:["Stoicism","Existentialism","Ethics","Epistemology","Eastern Philosophy"]},
+  {id:"psychology", name:"Psychology",  parent:"Social Sciences",  icon:"🌀",color:"#f472b6",bg:"#160810",desc:"Understand the human mind, behavior, emotion and cognitive processes.",                    topics:["Cognitive Biases","Freud & Jung","Behavioral Science","Memory","Personality"]},
+  {id:"culture",    name:"Culture",     parent:"Social Sciences",  icon:"🎭",color:"#34d399",bg:"#041510",desc:"Dive into art movements, traditions, societies and how humans express meaning.",            topics:["World Religions","Mythology","Language & Linguistics","Art History","Anthropology"]},
+  {id:"chemistry",  name:"Chemistry",   parent:"Natural Sciences", icon:"⚗️",color:"#38bdf8",bg:"#04111a",desc:"From atoms to reactions — the science that builds everything around you.",                 topics:["Periodic Table","Chemical Bonds","Organic Chemistry","Thermodynamics","Acids & Bases"]},
+  {id:"astronomy",  name:"Astronomy",   parent:"Natural Sciences", icon:"🔭",color:"#818cf8",bg:"#06080f",desc:"Explore galaxies, black holes, dark matter and the vast cosmic universe.",                  topics:["The Solar System","Black Holes","Big Bang Theory","Exoplanets","Space-Time"]},
+  {id:"mathematics",name:"Mathematics", parent:"Formal Sciences",  icon:"∑", color:"#fb923c",bg:"#130a03",desc:"The universal language — patterns, proof, logic and elegant abstraction.",                  topics:["Number Theory","Calculus","Linear Algebra","Probability","Topology"]},
+  {id:"arts",       name:"The Arts",    parent:"Arts",             icon:"🎨",color:"#f87171",bg:"#150404",desc:"Music theory, visual arts, film, architecture — creativity given structure.",               topics:["Music Theory","Cinema History","Architecture","Sculpture","Photography"]},
+];
+
+const QUIZ={
+  history:[
+    {q:"Which Roman emperor officially split the empire in 285 AD?",        opts:["Constantine","Diocletian","Nero","Augustus"],          ans:1,exp:"Diocletian split the Roman Empire into Eastern and Western halves to improve governance."},
+    {q:"What year did World War I begin?",                                   opts:["1912","1914","1916","1918"],                          ans:1,exp:"WWI began in 1914, triggered by the assassination of Archduke Franz Ferdinand."},
+    {q:"The Renaissance began in which country?",                           opts:["France","England","Italy","Germany"],                 ans:2,exp:"The Renaissance began in Italy, particularly in Florence, Venice, and Rome."},
+  ],
+  philosophy:[
+    {q:"Who wrote 'Thus Spoke Zarathustra'?",                               opts:["Kant","Hegel","Nietzsche","Schopenhauer"],            ans:2,exp:"Friedrich Nietzsche wrote it (1883–1885), introducing the concept of the Übermensch."},
+    {q:"Stoicism was founded by which philosopher?",                        opts:["Socrates","Zeno of Citium","Epicurus","Plato"],       ans:1,exp:"Zeno of Citium founded Stoicism around 300 BC in Athens."},
+    {q:"'I think, therefore I am' is attributed to:",                       opts:["Aristotle","Hume","Descartes","Leibniz"],             ans:2,exp:"René Descartes wrote 'Cogito, ergo sum' as a foundation of his philosophical method."},
+  ],
+  psychology:[
+    {q:"Who is considered the father of psychoanalysis?",                   opts:["Jung","Adler","Freud","Skinner"],                     ans:2,exp:"Sigmund Freud founded psychoanalysis, emphasizing the role of the unconscious mind."},
+    {q:"The 'fight or flight' response is controlled by which system?",     opts:["Parasympathetic","Sympathetic","Somatic","Enteric"],  ans:1,exp:"The sympathetic nervous system triggers the fight-or-flight response to stress."},
+    {q:"Classical conditioning was first demonstrated by:",                 opts:["Watson","Pavlov","Skinner","Bandura"],                ans:1,exp:"Ivan Pavlov discovered classical conditioning through experiments with dogs and bells."},
+  ],
+  culture:[
+    {q:"Which ancient wonder was located in Alexandria?",                   opts:["The Colossus","Temple of Artemis","The Lighthouse","Hanging Gardens"],ans:2,exp:"The Lighthouse of Alexandria was one of the Seven Wonders of the Ancient World."},
+    {q:"Haiku poetry originates from which country?",                       opts:["China","Korea","Japan","Vietnam"],                    ans:2,exp:"Haiku is a traditional form of Japanese poetry with a 5-7-5 syllable structure."},
+    {q:"The Quran is the holy book of which religion?",                     opts:["Judaism","Christianity","Hinduism","Islam"],          ans:3,exp:"The Quran is the central religious text of Islam, believed to be revealed to Muhammad."},
+  ],
+  chemistry:[
+    {q:"What is the chemical symbol for Gold?",                             opts:["Go","Gd","Au","Ag"],                                  ans:2,exp:"Gold's symbol Au comes from the Latin word Aurum."},
+    {q:"How many elements are in the periodic table?",                      opts:["108","112","118","124"],                              ans:2,exp:"As of 2024, there are 118 confirmed elements in the periodic table."},
+    {q:"Water (H₂O) is made of which elements?",                           opts:["H & N","H & O","O & C","N & O"],                     ans:1,exp:"Water is composed of two hydrogen atoms bonded to one oxygen atom."},
+  ],
+  astronomy:[
+    {q:"What is the largest planet in our solar system?",                   opts:["Saturn","Uranus","Jupiter","Neptune"],                ans:2,exp:"Jupiter is the largest planet, with a mass greater than all other planets combined."},
+    {q:"Approximate distance from Earth to the Moon?",                      opts:["150,000 km","384,400 km","1.2M km","56,000 km"],     ans:1,exp:"The Moon orbits at roughly 384,400 km from Earth on average."},
+    {q:"What type of galaxy is the Milky Way?",                             opts:["Elliptical","Irregular","Barred Spiral","Ring"],      ans:2,exp:"The Milky Way is a barred spiral galaxy with a central bar structure and spiral arms."},
+  ],
+  mathematics:[
+    {q:"What is the value of π to two decimal places?",                     opts:["3.12","3.14","3.16","3.18"],                          ans:1,exp:"Pi ≈ 3.14159… It is the ratio of a circle's circumference to its diameter."},
+    {q:"What is the derivative of x²?",                                     opts:["x","2x","x²","2x²"],                                 ans:1,exp:"By the power rule, the derivative of x² is 2x."},
+    {q:"The interior angles of a triangle always sum to:",                  opts:["90°","180°","270°","360°"],                          ans:1,exp:"The interior angles of any triangle in Euclidean geometry always sum to 180°."},
+  ],
+  arts:[
+    {q:"Who painted the Mona Lisa?",                                        opts:["Raphael","Michelangelo","Leonardo da Vinci","Botticelli"],ans:2,exp:"Leonardo da Vinci painted the Mona Lisa between approximately 1503 and 1519."},
+    {q:"Which musical term means to play very softly?",                     opts:["Forte","Pianissimo","Mezzo","Allegro"],               ans:1,exp:"Pianissimo (pp) means to play very softly in musical notation."},
+    {q:"The Guggenheim Museum in New York was designed by:",                opts:["Mies van der Rohe","Le Corbusier","Frank Lloyd Wright","Zaha Hadid"],ans:2,exp:"Frank Lloyd Wright designed the Guggenheim Museum, completed in 1959."},
+  ],
+};
+
+/* Stars */
+function initStars(){
+  const c=document.getElementById("sc"); if(!c)return;
+  const ctx=c.getContext("2d");
+  const resize=()=>{c.width=window.innerWidth;c.height=window.innerHeight;};
+  resize(); window.addEventListener("resize",resize);
+  const stars=Array.from({length:200},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.3+.2,a:Math.random()*.6+.1,da:(Math.random()-.5)*.015}));
+  let id;
+  const draw=()=>{
+    ctx.clearRect(0,0,c.width,c.height);
+    stars.forEach(s=>{ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${s.a})`;ctx.fill();s.a+=s.da;if(s.a>.9||s.a<.05)s.da*=-1;});
+    id=requestAnimationFrame(draw);
+  };
+  draw(); return()=>cancelAnimationFrame(id);
+}
+
+function Notif({n}){
+  if(!n)return null;
+  return<div style={{position:"fixed",top:"74px",left:"50%",transform:"translateX(-50%)",zIndex:999,background:`${n.c}18`,border:`1px solid ${n.c}55`,color:n.c,padding:".62rem 1.4rem",borderRadius:"10px",fontSize:".87rem",fontWeight:600,backdropFilter:"blur(12px)",animation:"fadeInDown .3s ease",whiteSpace:"nowrap"}}>{n.m}</div>;
+}
+
+function Nav({user,go,signOut,xp}){
+  return<nav style={{position:"fixed",top:0,left:0,right:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 1.8rem",height:"62px",background:"rgba(7,8,13,.88)",backdropFilter:"blur(20px)",borderBottom:"1px solid rgba(255,255,255,.06)"}}>
+    <div onClick={()=>go(user?"dashboard":"home")} style={{fontFamily:"'Syne',sans-serif",fontSize:"1.35rem",fontWeight:800,letterSpacing:"-.03em",cursor:"pointer",background:"linear-gradient(135deg,#818cf8,#38bdf8)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>StudyVerse ✦</div>
+    <div style={{display:"flex",gap:".7rem",alignItems:"center"}}>
+      {!user?<>
+        <button className="btn-g" onClick={()=>go("auth")} style={{padding:".45rem 1.1rem",fontSize:".84rem"}}>Sign In</button>
+        <button className="btn-p" onClick={()=>go("auth")} style={{padding:".5rem 1.2rem",fontSize:".84rem",animation:"none",background:"linear-gradient(135deg,#818cf8,#38bdf8)"}}>Get Started</button>
+      </>:<>
+        <span style={{fontSize:".8rem",color:"#8b8fa8"}}><span style={{color:"#34d399",fontWeight:700}}>{xp} XP</span></span>
+        <button className="btn-g" onClick={signOut} style={{padding:".4rem 1rem",fontSize:".8rem",color:"#f87171",borderColor:"#f8717145"}}>Sign Out</button>
+      </>}
+    </div>
+  </nav>;
+}
+
+function CatCard({cat,onClick,pts}){
+  return<div className="cat-card" onClick={onClick} style={{position:"relative",background:cat.bg,border:`1px solid ${cat.color}28`,borderRadius:"16px",padding:"1.6rem",cursor:"pointer",boxShadow:"0 4px 22px rgba(0,0,0,.45)"}}>
+    <div className="glow" style={{position:"absolute",inset:0,borderRadius:"16px",background:`radial-gradient(circle at 30% 30%,${cat.color}18,transparent 70%)`,opacity:0,transition:"opacity .3s"}}/>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:".7rem"}}>
+      <span style={{fontSize:"1.9rem"}}>{cat.icon}</span>
+      {pts>0&&<span style={{fontSize:".7rem",fontWeight:700,color:cat.color,background:`${cat.color}18`,padding:".2rem .6rem",borderRadius:"100px",border:`1px solid ${cat.color}35`}}>{pts*10} XP</span>}
+    </div>
+    <div style={{fontSize:".68rem",color:cat.color,fontWeight:700,letterSpacing:".1em",marginBottom:".25rem",textTransform:"uppercase"}}>{cat.parent}</div>
+    <h3 style={{fontFamily:"'Syne',sans-serif",fontSize:"1.2rem",fontWeight:800,marginBottom:".45rem"}}>{cat.name}</h3>
+    <p style={{fontSize:".78rem",color:"#7a7f95",lineHeight:1.6,marginBottom:".85rem"}}>{cat.desc.slice(0,70)}…</p>
+    <div style={{display:"flex",flexWrap:"wrap",gap:".35rem"}}>
+      {cat.topics.slice(0,3).map(t=><span key={t} style={{fontSize:".67rem",padding:".22rem .55rem",borderRadius:"100px",background:`${cat.color}15`,color:cat.color,border:`1px solid ${cat.color}30`}}>{t}</span>)}
+    </div>
+    {pts>0&&<div style={{height:"4px",background:"rgba(255,255,255,.08)",borderRadius:"100px",overflow:"hidden",marginTop:".9rem"}}>
+      <div style={{height:"100%",width:`${Math.min(100,(pts/3)*100)}%`,background:cat.color,borderRadius:"100px"}}/>
+    </div>}
+  </div>;
+}
+
+function Home({go}){
+  return<div className="page" style={{minHeight:"100vh"}}>
+    <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",textAlign:"center",padding:"7rem 1.5rem 3rem"}}>
+      <div className="anim-a" style={{display:"inline-flex",alignItems:"center",gap:".5rem",background:"rgba(129,140,248,.1)",border:"1px solid rgba(129,140,248,.3)",borderRadius:"100px",padding:".38rem 1rem",marginBottom:"2rem",fontSize:".74rem",color:"#818cf8",fontWeight:700,letterSpacing:".1em"}}>✦ &nbsp; KNOWLEDGE FOR THE NEW GENERATION</div>
+      <h1 className="anim-b" style={{fontFamily:"'Syne',sans-serif",fontSize:"clamp(2.8rem,8vw,6.5rem)",fontWeight:800,lineHeight:.93,letterSpacing:"-.04em",marginBottom:"1.4rem"}}>
+        <span style={{color:"#e8eaf0"}}>Learn anything.</span><br/>
+        <span style={{background:"linear-gradient(135deg,#818cf8 0%,#38bdf8 50%,#34d399 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>Master everything.</span>
+      </h1>
+      <p className="anim-c" style={{maxWidth:"500px",fontSize:"1.05rem",color:"#8b8fa8",lineHeight:1.75,marginBottom:"2.4rem"}}>Pick a subject. Dive deep. Track your progress. StudyVerse makes learning feel like an exploration, not a chore.</p>
+      <div className="anim-d" style={{display:"flex",gap:"1rem",flexWrap:"wrap",justifyContent:"center"}}>
+        <button className="btn-p" onClick={()=>go("auth")}>Start Learning Free →</button>
+        <button className="btn-g" onClick={()=>document.getElementById("cats")?.scrollIntoView({behavior:"smooth"})}>Browse Subjects</button>
+      </div>
+      <div className="anim-d" style={{display:"flex",gap:"3rem",marginTop:"4rem",flexWrap:"wrap",justifyContent:"center"}}>
+        {[["8+","Subjects"],["200+","Quiz Questions"],["Free","Forever"]].map(([n,l])=><div key={l} style={{textAlign:"center"}}>
+          <div style={{fontFamily:"'Syne',sans-serif",fontSize:"2rem",fontWeight:800,background:"linear-gradient(135deg,#818cf8,#38bdf8)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{n}</div>
+          <div style={{fontSize:".75rem",color:"#6b6f80",letterSpacing:".08em",marginTop:".2rem",textTransform:"uppercase"}}>{l}</div>
+        </div>)}
+      </div>
+    </div>
+    <div id="cats" style={{padding:"2rem 1.5rem 6rem",maxWidth:"1200px",margin:"0 auto"}}>
+      <div style={{textAlign:"center",marginBottom:"2.5rem"}}>
+        <h2 style={{fontFamily:"'Syne',sans-serif",fontSize:"clamp(1.7rem,4vw,2.6rem)",fontWeight:800,letterSpacing:"-.03em",marginBottom:".5rem"}}>Choose Your Path</h2>
+        <p style={{color:"#8b8fa8"}}>Eight worlds of knowledge, each one waiting for you</p>
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(255px,1fr))",gap:"1.1rem"}}>
+        {CATS.map(cat=><CatCard key={cat.id} cat={cat} pts={0} onClick={()=>go("auth")}/>)}
+      </div>
+    </div>
+  </div>;
+}
+
+function Auth({onAuth}){
+  const[mode,setMode]=useState("signup");
+  const[form,setForm]=useState({name:"",email:"",password:""});
+  const upd=(k,v)=>setForm(f=>({...f,[k]:v}));
+  return<div className="page" style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"5rem 1.5rem 2rem"}}>
+    <div style={{width:"100%",maxWidth:"420px"}}>
+      <div style={{textAlign:"center",marginBottom:"1.8rem"}}>
+        <h2 style={{fontFamily:"'Syne',sans-serif",fontSize:"2rem",fontWeight:800,marginBottom:".4rem"}}>{mode==="signin"?"Welcome back":"Join StudyVerse"}</h2>
+        <p style={{color:"#8b8fa8",fontSize:".9rem"}}>{mode==="signin"?"Continue your learning journey":"Start exploring knowledge today"}</p>
+      </div>
+      <div style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",borderRadius:"20px",padding:"1.8rem",backdropFilter:"blur(20px)"}}>
+        <div style={{display:"flex",background:"rgba(255,255,255,.05)",borderRadius:"10px",padding:"4px",marginBottom:"1.4rem"}}>
+          {["signin","signup"].map(m=><button key={m} onClick={()=>setMode(m)} style={{flex:1,padding:".6rem",borderRadius:"7px",border:"none",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",background:mode===m?"rgba(129,140,248,.3)":"transparent",color:mode===m?"#818cf8":"#8b8fa8",fontWeight:600,fontSize:".85rem",transition:"all .2s"}}>{m==="signin"?"Sign In":"Sign Up"}</button>)}
+        </div>
+        {mode==="signup"&&<div style={{marginBottom:"1rem"}}>
+          <label style={{fontSize:".74rem",color:"#8b8fa8",fontWeight:600,display:"block",marginBottom:".4rem"}}>NAME</label>
+          <input value={form.name} onChange={e=>upd("name",e.target.value)} placeholder="Your name"/>
+        </div>}
+        <div style={{marginBottom:"1rem"}}>
+          <label style={{fontSize:".74rem",color:"#8b8fa8",fontWeight:600,display:"block",marginBottom:".4rem"}}>EMAIL</label>
+          <input type="email" value={form.email} onChange={e=>upd("email",e.target.value)} placeholder="you@email.com"/>
+        </div>
+        <div style={{marginBottom:"1.4rem"}}>
+          <label style={{fontSize:".74rem",color:"#8b8fa8",fontWeight:600,display:"block",marginBottom:".4rem"}}>PASSWORD</label>
+          <input type="password" value={form.password} onChange={e=>upd("password",e.target.value)} placeholder="••••••••"/>
+        </div>
+        <button className="btn-p" style={{width:"100%",padding:".9rem",animation:"none",background:"linear-gradient(135deg,#818cf8,#38bdf8)"}} onClick={()=>onAuth(form,mode)}>
+          {mode==="signin"?"Sign In →":"Create Account →"}
+        </button>
+        <div style={{textAlign:"center",marginTop:"1.1rem"}}>
+          <button onClick={()=>onAuth({name:"Demo User",email:"demo@studyverse.app",password:"x"},mode)} style={{background:"none",border:"none",color:"#818cf8",fontSize:".82rem",cursor:"pointer",textDecoration:"underline",fontFamily:"'DM Sans',sans-serif"}}>
+            Try demo (no sign up needed)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>;
+}
+
+function Dashboard({user,progress,goStudy}){
+  const xp=Object.values(progress).reduce((a,b)=>a+b,0)*10;
+  const started=Object.keys(progress).length;
+  return<div className="page" style={{minHeight:"100vh",padding:"5.5rem 1.5rem 4rem",maxWidth:"1200px",margin:"0 auto"}}>
+    <div style={{marginBottom:"2.2rem"}}>
+      <div style={{fontSize:".74rem",color:"#818cf8",fontWeight:700,letterSpacing:".1em",marginBottom:".3rem"}}>WELCOME BACK</div>
+      <h2 style={{fontFamily:"'Syne',sans-serif",fontSize:"clamp(1.7rem,4vw,2.4rem)",fontWeight:800,letterSpacing:"-.03em"}}>{user.name} ✦</h2>
+    </div>
+    <div style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",borderRadius:"16px",padding:"1.4rem 1.6rem",marginBottom:"2rem"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"1rem",flexWrap:"wrap",gap:"1rem"}}>
+        <div>
+          <div style={{fontSize:".74rem",color:"#8b8fa8",fontWeight:600,marginBottom:".2rem"}}>TOTAL XP EARNED</div>
+          <div style={{fontFamily:"'Syne',sans-serif",fontSize:"2.2rem",fontWeight:800,background:"linear-gradient(135deg,#818cf8,#34d399)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{xp} XP</div>
+        </div>
+        <div style={{textAlign:"right"}}>
+          <div style={{fontSize:".74rem",color:"#8b8fa8",fontWeight:600,marginBottom:".2rem"}}>SUBJECTS STARTED</div>
+          <div style={{fontSize:"1.6rem",fontWeight:800}}>{started} / {CATS.length}</div>
+        </div>
+      </div>
+      <div style={{height:"6px",background:"rgba(255,255,255,.08)",borderRadius:"100px",overflow:"hidden"}}>
+        <div style={{height:"100%",width:`${Math.min(100,(started/CATS.length)*100)}%`,background:"linear-gradient(90deg,#818cf8,#38bdf8,#34d399)",borderRadius:"100px",transition:"width 1s ease"}}/>
+      </div>
+    </div>
+    <h3 style={{fontFamily:"'Syne',sans-serif",fontSize:"1.1rem",fontWeight:800,marginBottom:"1.1rem"}}>All Subjects</h3>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(255px,1fr))",gap:"1.1rem"}}>
+      {CATS.map(cat=><CatCard key={cat.id} cat={cat} pts={progress[cat.id]||0} onClick={()=>goStudy(cat)}/>)}
+    </div>
+  </div>;
+}
+
+function Study({cat,go,startQuiz}){
+  if(!cat)return null;
+  return<div className="page" style={{minHeight:"100vh",padding:"5.5rem 1.5rem 3rem",maxWidth:"860px",margin:"0 auto"}}>
+    <button onClick={()=>go("dashboard")} style={{background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.1)",borderRadius:"8px",color:"#8b8fa8",padding:".45rem .95rem",cursor:"pointer",marginBottom:"2rem",fontSize:".84rem",fontFamily:"'DM Sans',sans-serif"}}>← Back</button>
+    <div style={{display:"flex",alignItems:"center",gap:"1.1rem",marginBottom:"1.8rem"}}>
+      <div style={{fontSize:"3.2rem"}}>{cat.icon}</div>
+      <div>
+        <div style={{fontSize:".72rem",color:cat.color,fontWeight:700,letterSpacing:".1em",textTransform:"uppercase"}}>{cat.parent}</div>
+        <h2 style={{fontFamily:"'Syne',sans-serif",fontSize:"clamp(1.5rem,4vw,2.2rem)",fontWeight:800}}>{cat.name}</h2>
+      </div>
+    </div>
+    <p style={{color:"#9da2b8",lineHeight:1.8,marginBottom:"2.5rem",fontSize:"1rem",maxWidth:"580px",borderLeft:`3px solid ${cat.color}`,paddingLeft:"1rem"}}>{cat.desc}</p>
+    <h3 style={{fontFamily:"'Syne',sans-serif",fontSize:"1.05rem",fontWeight:800,marginBottom:"1rem"}}>Topics to Explore</h3>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(190px,1fr))",gap:".75rem",marginBottom:"2.5rem"}}>
+      {cat.topics.map(t=><div key={t} style={{padding:".95rem 1rem",background:`${cat.color}12`,border:`1px solid ${cat.color}28`,borderRadius:"12px",fontSize:".88rem",fontWeight:500}}><span style={{color:cat.color,marginRight:".4rem"}}>→</span>{t}</div>)}
+    </div>
+    <button className="btn-p" onClick={startQuiz} style={{padding:"1rem 2.5rem",fontSize:"1rem",boxShadow:`0 0 30px ${cat.color}45`}}>🎯 &nbsp; Start Quiz</button>
+  </div>;
+}
+
+function Quiz({cat,go,onComplete}){
+  const[idx,setIdx]=useState(0);
+  const[sel,setSel]=useState(null);
+  const[ans,setAns]=useState(false);
+  const[score,setScore]=useState(0);
+  const[done,setDone]=useState(false);
+  if(!cat)return null;
+  const qs=QUIZ[cat.id]||[{q:`Sample for ${cat.id}`,opts:["A","B","C","D"],ans:0,exp:"Sample."}];
+  const q=qs[idx];
+
+  const pick=(i)=>{
+    if(ans)return;
+    setSel(i);setAns(true);
+    if(i===q.ans)setScore(s=>s+1);
+  };
+  const next=()=>{
+    if(idx+1>=qs.length){onComplete(cat.id,score);setDone(true);}
+    else{setIdx(i=>i+1);setSel(null);setAns(false);}
+  };
+
+  if(done)return<div className="page" style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"2rem",textAlign:"center"}}>
+    <div style={{fontSize:"4.5rem",marginBottom:"1rem",animation:"pulse 1.5s ease infinite"}}>{score===qs.length?"🏆":score>=qs.length/2?"⭐":"📚"}</div>
+    <h2 style={{fontFamily:"'Syne',sans-serif",fontSize:"2rem",fontWeight:800,marginBottom:".5rem"}}>Quiz Complete!</h2>
+    <p style={{color:"#8b8fa8",marginBottom:".4rem"}}>You scored <span style={{color:cat.color,fontWeight:700}}>{score}/{qs.length}</span> on {cat.name}</p>
+    <p style={{color:"#34d399",fontWeight:600,marginBottom:"2rem",fontSize:".9rem"}}>+{score*10} XP earned!</p>
+    <div style={{display:"flex",gap:"1rem",flexWrap:"wrap",justifyContent:"center"}}>
+      <button className="btn-p" onClick={()=>{setIdx(0);setSel(null);setAns(false);setScore(0);setDone(false);}}>Try Again</button>
+      <button className="btn-g" onClick={()=>go("dashboard")}>Dashboard</button>
+    </div>
+  </div>;
+
+  return<div className="page" style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"5rem 1.5rem 2rem"}}>
+    <div style={{width:"100%",maxWidth:"560px"}}>
+      <div style={{display:"flex",justifyContent:"space-between",fontSize:".78rem",color:"#8b8fa8",marginBottom:".4rem"}}>
+        <span>{cat.icon} {cat.name}</span><span>Question {idx+1}/{qs.length}</span>
+      </div>
+      <div style={{height:"4px",background:"rgba(255,255,255,.08)",borderRadius:"100px",overflow:"hidden",marginBottom:"2rem"}}>
+        <div style={{height:"100%",width:`${(idx/qs.length)*100}%`,background:cat.color,borderRadius:"100px",transition:"width .5s"}}/>
+      </div>
+      <div style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",borderRadius:"18px",padding:"1.8rem",marginBottom:"1.4rem"}}>
+        <h3 style={{fontFamily:"'Syne',sans-serif",fontSize:"1.2rem",fontWeight:700,lineHeight:1.45}}>{q.q}</h3>
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:".75rem",marginBottom:"1.4rem"}}>
+        {q.opts.map((opt,i)=>{
+          let bg="rgba(255,255,255,.04)",border="1px solid rgba(255,255,255,.1)",color="#e8eaf0";
+          if(ans){
+            if(i===q.ans){bg=`${cat.color}22`;border=`1px solid ${cat.color}`;color=cat.color;}
+            else if(i===sel&&i!==q.ans){bg="rgba(248,113,113,.15)";border="1px solid #f87171";color="#f87171";}
+          }
+          return<button key={i} className="opt" disabled={ans} onClick={()=>pick(i)} style={{background:bg,border,color}}>
+            <span style={{width:"24px",height:"24px",borderRadius:"50%",background:"rgba(255,255,255,.1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:".72rem",fontWeight:700,flexShrink:0}}>{["A","B","C","D"][i]}</span>
+            {opt}
+          </button>;
+        })}
+      </div>
+      {ans&&<div style={{animation:"fadeIn .4s ease"}}>
+        <div style={{padding:"1rem",background:`${cat.color}12`,border:`1px solid ${cat.color}28`,borderRadius:"12px",fontSize:".84rem",color:"#c5c8d6",lineHeight:1.7,marginBottom:"1rem"}}>
+          <span style={{color:cat.color,fontWeight:700}}>💡 Explanation: </span>{q.exp}
+        </div>
+        <button className="btn-p" style={{width:"100%",padding:".9rem",fontSize:".95rem"}} onClick={next}>
+          {idx+1>=qs.length?"See Results →":"Next Question →"}
+        </button>
+      </div>}
+    </div>
+  </div>;
+}
+
+function App(){
+  const[page,setPage]=useState("home");
+  const[user,setUser]=useState(null);
+  const[cat,setCat]=useState(null);
+  const[progress,setProgress]=useState({});
+  const[notif,setNotif]=useState(null);
+
+  useEffect(()=>initStars(),[]);
+
+  const go=(p)=>{window.scrollTo({top:0,behavior:"smooth"});setPage(p);};
+  const showN=(m,c="#34d399")=>{setNotif({m,c});setTimeout(()=>setNotif(null),2600);};
+
+  const handleAuth=(form,mode)=>{
+    if(!form.email){showN("Please enter your email","#f87171");return;}
+    setUser({name:form.name||"Learner",email:form.email});
+    go("dashboard");
+    showN(mode==="signup"?"Welcome to StudyVerse! 🎉":"Welcome back! 👋");
+  };
+  const signOut=()=>{setUser(null);setProgress({});setCat(null);go("home");showN("Signed out","#818cf8");};
+  const onComplete=(catId,s)=>{setProgress(p=>({...p,[catId]:(p[catId]||0)+1}));};
+  const xp=Object.values(progress).reduce((a,b)=>a+b,0)*10;
+
+  return<>
+    <Notif n={notif}/>
+    <Nav user={user} go={go} signOut={signOut} xp={xp}/>
+    {page==="home"&&<Home go={go}/>}
+    {page==="auth"&&<Auth onAuth={handleAuth}/>}
+    {page==="dashboard"&&user&&<Dashboard user={user} progress={progress} goStudy={c=>{setCat(c);go("study");}}/>}
+    {page==="study"&&user&&<Study cat={cat} go={go} startQuiz={()=>go("quiz")}/>}
+    {page==="quiz"&&user&&<Quiz cat={cat} go={go} onComplete={onComplete}/>}
+  </>;
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
