@@ -1,212 +1,461 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>StudyVerse — Learn Anything</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet"/>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body { background: #07080d; color: #e8eaf0; font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
-  ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: #07080d; }
-  ::-webkit-scrollbar-thumb { background: #2a2d3a; border-radius: 3px; }
-  @keyframes fadeInDown { from{opacity:0;transform:translateY(-12px);}to{opacity:1;transform:translateY(0);} }
-  @keyframes slideUp    { from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:translateY(0);} }
-  @keyframes fadeIn     { from{opacity:0;}to{opacity:1;} }
-  @keyframes gradMove   { 0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;} }
-  @keyframes pulse      { 0%,100%{transform:scale(1);}50%{transform:scale(1.05);} }
-  .anim-a { animation: fadeInDown .7s ease both; }
-  .anim-b { animation: slideUp .8s ease .1s both; }
-  .anim-c { animation: slideUp .8s ease .25s both; }
-  .anim-d { animation: slideUp .8s ease .4s both; }
-  .cat-card { transition: transform .28s ease, box-shadow .28s ease !important; }
-  .cat-card:hover { transform: translateY(-7px) scale(1.02) !important; }
-  .cat-card:hover .glow { opacity: 1 !important; }
-  .btn-p {
-    display:inline-flex;align-items:center;justify-content:center;
-    padding:.85rem 2rem;border-radius:10px;border:none;cursor:pointer;
-    font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;color:#fff;
-    background:linear-gradient(135deg,#818cf8,#38bdf8,#34d399);
-    background-size:200% 200%;animation:gradMove 4s ease infinite;
-    box-shadow:0 0 28px rgba(129,140,248,.4);transition:opacity .2s,transform .2s;
-  }
-  .btn-p:hover{opacity:.88;transform:scale(1.03);}
-  .btn-g {
-    display:inline-flex;align-items:center;justify-content:center;
-    padding:.8rem 2rem;border-radius:10px;cursor:pointer;
-    font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;color:#e8eaf0;
-    background:transparent;border:1px solid rgba(255,255,255,.15);
-    transition:background .2s,border-color .2s;
-  }
-  .btn-g:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.3);}
-  input,button{font-family:'DM Sans',sans-serif;}
-  input{width:100%;padding:.8rem 1rem;border-radius:10px;font-size:.9rem;outline:none;
-    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#e8eaf0;}
-  input::placeholder{color:#555868;}
-  input:focus{border-color:rgba(129,140,248,.5);box-shadow:0 0 0 3px rgba(129,140,248,.12);}
-  #sc{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.55;}
-  .page{position:relative;z-index:1;}
-  .opt{width:100%;padding:1rem 1.2rem;border-radius:12px;border:1px solid rgba(255,255,255,.1);
-    background:rgba(255,255,255,.04);color:#e8eaf0;text-align:left;font-size:.93rem;font-weight:500;
-    cursor:pointer;display:flex;align-items:center;gap:.8rem;transition:background .2s,border-color .2s;
-    font-family:'DM Sans',sans-serif;}
-  .opt:hover:not(:disabled){background:rgba(255,255,255,.09);}
-  .opt:disabled{cursor:default;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:#07080d;color:#e8eaf0;font-family:'DM Sans',sans-serif;overflow-x:hidden;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:#07080d;}::-webkit-scrollbar-thumb{background:#2a2d3a;border-radius:3px;}
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-12px);}to{opacity:1;transform:translateY(0);}}
+@keyframes slideUp{from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes gradMove{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+.anim-a{animation:fadeInDown .7s ease both;}
+.anim-b{animation:slideUp .8s ease .1s both;}
+.anim-c{animation:slideUp .8s ease .25s both;}
+.anim-d{animation:slideUp .8s ease .4s both;}
+.cc{transition:transform .28s ease,box-shadow .28s ease!important;}
+.cc:hover{transform:translateY(-7px) scale(1.02)!important;}
+.cc:hover .glow{opacity:1!important;}
+.btn-p{display:inline-flex;align-items:center;justify-content:center;padding:.85rem 2rem;border-radius:10px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;color:#fff;background:linear-gradient(135deg,#818cf8,#38bdf8,#34d399);background-size:200% 200%;animation:gradMove 4s ease infinite;box-shadow:0 0 28px rgba(129,140,248,.4);transition:opacity .2s,transform .2s;}
+.btn-p:hover{opacity:.88;transform:scale(1.03);}
+.btn-g{display:inline-flex;align-items:center;justify-content:center;padding:.8rem 2rem;border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;color:#e8eaf0;background:transparent;border:1px solid rgba(255,255,255,.15);transition:background .2s;}
+.btn-g:hover{background:rgba(255,255,255,.07);}
+input,button{font-family:'DM Sans',sans-serif;}
+input{width:100%;padding:.8rem 1rem;border-radius:10px;font-size:.9rem;outline:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#e8eaf0;}
+input::placeholder{color:#555868;}
+input:focus{border-color:rgba(129,140,248,.5);}
+#sc{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;}
+.page{position:relative;z-index:1;}
+.opt{width:100%;padding:1rem 1.2rem;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#e8eaf0;text-align:left;font-size:.93rem;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:.8rem;transition:background .2s;font-family:'DM Sans',sans-serif;}
+.opt:hover:not(:disabled){background:rgba(255,255,255,.09);}
+.opt:disabled{cursor:default;}
 </style>
 </head>
 <body>
 <canvas id="sc"></canvas>
 <div id="root"></div>
+<script id="app-data" type="application/json">
+{
+  "cats":[
+    {"id":"history","name":"History","parent":"Humanities","icon":"🏛️","color":"#c8a96e","bg":"#120f05","desc":"Empires, revolutions, wars and the events that forged our world."},
+    {"id":"philosophy","name":"Philosophy","parent":"Humanities","icon":"🧠","color":"#a78bfa","bg":"#0e0c18","desc":"Reality, existence, ethics and the deepest questions of human life."},
+    {"id":"literature","name":"Literature","parent":"Humanities","icon":"📖","color":"#e879f9","bg":"#130a18","desc":"Great novels, poetry and the stories that define human experience."},
+    {"id":"psychology","name":"Psychology","parent":"Social Sciences","icon":"🌀","color":"#f472b6","bg":"#160810","desc":"The human mind, behavior, emotions and cognitive science."},
+    {"id":"economics","name":"Economics","parent":"Social Sciences","icon":"📈","color":"#4ade80","bg":"#051209","desc":"Markets, supply and demand, trade and the forces that drive money."},
+    {"id":"geography","name":"Geography","parent":"Social Sciences","icon":"🌍","color":"#2dd4bf","bg":"#041210","desc":"Countries, capitals, continents and the physical world around us."},
+    {"id":"biology","name":"Biology","parent":"Natural Sciences","icon":"🧬","color":"#86efac","bg":"#051209","desc":"Life, cells, DNA, evolution and the science of living organisms."},
+    {"id":"chemistry","name":"Chemistry","parent":"Natural Sciences","icon":"⚗️","color":"#38bdf8","bg":"#04111a","desc":"Atoms, reactions, the periodic table and the building blocks of matter."},
+    {"id":"physics","name":"Physics","parent":"Natural Sciences","icon":"⚡","color":"#fbbf24","bg":"#130f03","desc":"Forces, energy, gravity, light and the laws of the universe."},
+    {"id":"astronomy","name":"Astronomy","parent":"Natural Sciences","icon":"🔭","color":"#818cf8","bg":"#06080f","desc":"Planets, galaxies, black holes and the mysteries of the cosmos."},
+    {"id":"mathematics","name":"Mathematics","parent":"Formal Sciences","icon":"∑","color":"#fb923c","bg":"#130a03","desc":"Numbers, calculus, geometry and the language of the universe."},
+    {"id":"computersc","name":"Computer Science","parent":"Formal Sciences","icon":"💻","color":"#67e8f9","bg":"#041215","desc":"Algorithms, data structures, programming and how computers think."},
+    {"id":"arts","name":"The Arts","parent":"Arts","icon":"🎨","color":"#f87171","bg":"#150404","desc":"Music, painting, cinema and the structure of creativity."},
+    {"id":"culture","name":"World Culture","parent":"Arts","icon":"🎭","color":"#34d399","bg":"#041510","desc":"Religions, mythology, traditions and how civilizations express meaning."}
+  ]
+}
+</script>
 <script type="text/babel">
 const{useState,useEffect}=React;
+const APPDATA=JSON.parse(document.getElementById("app-data").textContent);
+const CATS=APPDATA.cats;
 
-const CATS=[
-  {id:"history",    name:"History",     parent:"Humanities",       icon:"🏛️",color:"#c8a96e",bg:"#120f05",desc:"Explore civilizations, empires, revolutions and the forces that shaped humanity.",         topics:["Ancient Rome","World War II","The Renaissance","Cold War","Egyptian Civilization"]},
-  {id:"philosophy", name:"Philosophy",  parent:"Humanities",       icon:"🧠",color:"#a78bfa",bg:"#0e0c18",desc:"Question existence, ethics, knowledge and the nature of reality itself.",                   topics:["Stoicism","Existentialism","Ethics","Epistemology","Eastern Philosophy"]},
-  {id:"psychology", name:"Psychology",  parent:"Social Sciences",  icon:"🌀",color:"#f472b6",bg:"#160810",desc:"Understand the human mind, behavior, emotion and cognitive processes.",                    topics:["Cognitive Biases","Freud & Jung","Behavioral Science","Memory","Personality"]},
-  {id:"culture",    name:"Culture",     parent:"Social Sciences",  icon:"🎭",color:"#34d399",bg:"#041510",desc:"Dive into art movements, traditions, societies and how humans express meaning.",            topics:["World Religions","Mythology","Language & Linguistics","Art History","Anthropology"]},
-  {id:"chemistry",  name:"Chemistry",   parent:"Natural Sciences", icon:"⚗️",color:"#38bdf8",bg:"#04111a",desc:"From atoms to reactions — the science that builds everything around you.",                 topics:["Periodic Table","Chemical Bonds","Organic Chemistry","Thermodynamics","Acids & Bases"]},
-  {id:"astronomy",  name:"Astronomy",   parent:"Natural Sciences", icon:"🔭",color:"#818cf8",bg:"#06080f",desc:"Explore galaxies, black holes, dark matter and the vast cosmic universe.",                  topics:["The Solar System","Black Holes","Big Bang Theory","Exoplanets","Space-Time"]},
-  {id:"mathematics",name:"Mathematics", parent:"Formal Sciences",  icon:"∑", color:"#fb923c",bg:"#130a03",desc:"The universal language — patterns, proof, logic and elegant abstraction.",                  topics:["Number Theory","Calculus","Linear Algebra","Probability","Topology"]},
-  {id:"arts",       name:"The Arts",    parent:"Arts",             icon:"🎨",color:"#f87171",bg:"#150404",desc:"Music theory, visual arts, film, architecture — creativity given structure.",               topics:["Music Theory","Cinema History","Architecture","Sculpture","Photography"]},
-];
-
-const QUIZ={
-  history:[
-    {q:"Which Roman emperor officially split the empire in 285 AD?",        opts:["Constantine","Diocletian","Nero","Augustus"],          ans:1,exp:"Diocletian split the Roman Empire into Eastern and Western halves to improve governance."},
-    {q:"What year did World War I begin?",                                   opts:["1912","1914","1916","1918"],                          ans:1,exp:"WWI began in 1914, triggered by the assassination of Archduke Franz Ferdinand."},
-    {q:"The Renaissance began in which country?",                           opts:["France","England","Italy","Germany"],                 ans:2,exp:"The Renaissance began in Italy, particularly in Florence, Venice, and Rome."},
-  ],
-  philosophy:[
-    {q:"Who wrote 'Thus Spoke Zarathustra'?",                               opts:["Kant","Hegel","Nietzsche","Schopenhauer"],            ans:2,exp:"Friedrich Nietzsche wrote it (1883–1885), introducing the concept of the Übermensch."},
-    {q:"Stoicism was founded by which philosopher?",                        opts:["Socrates","Zeno of Citium","Epicurus","Plato"],       ans:1,exp:"Zeno of Citium founded Stoicism around 300 BC in Athens."},
-    {q:"'I think, therefore I am' is attributed to:",                       opts:["Aristotle","Hume","Descartes","Leibniz"],             ans:2,exp:"René Descartes wrote 'Cogito, ergo sum' as a foundation of his philosophical method."},
-  ],
-  psychology:[
-    {q:"Who is considered the father of psychoanalysis?",                   opts:["Jung","Adler","Freud","Skinner"],                     ans:2,exp:"Sigmund Freud founded psychoanalysis, emphasizing the role of the unconscious mind."},
-    {q:"The 'fight or flight' response is controlled by which system?",     opts:["Parasympathetic","Sympathetic","Somatic","Enteric"],  ans:1,exp:"The sympathetic nervous system triggers the fight-or-flight response to stress."},
-    {q:"Classical conditioning was first demonstrated by:",                 opts:["Watson","Pavlov","Skinner","Bandura"],                ans:1,exp:"Ivan Pavlov discovered classical conditioning through experiments with dogs and bells."},
-  ],
-  culture:[
-    {q:"Which ancient wonder was located in Alexandria?",                   opts:["The Colossus","Temple of Artemis","The Lighthouse","Hanging Gardens"],ans:2,exp:"The Lighthouse of Alexandria was one of the Seven Wonders of the Ancient World."},
-    {q:"Haiku poetry originates from which country?",                       opts:["China","Korea","Japan","Vietnam"],                    ans:2,exp:"Haiku is a traditional form of Japanese poetry with a 5-7-5 syllable structure."},
-    {q:"The Quran is the holy book of which religion?",                     opts:["Judaism","Christianity","Hinduism","Islam"],          ans:3,exp:"The Quran is the central religious text of Islam, believed to be revealed to Muhammad."},
-  ],
-  chemistry:[
-    {q:"What is the chemical symbol for Gold?",                             opts:["Go","Gd","Au","Ag"],                                  ans:2,exp:"Gold's symbol Au comes from the Latin word Aurum."},
-    {q:"How many elements are in the periodic table?",                      opts:["108","112","118","124"],                              ans:2,exp:"As of 2024, there are 118 confirmed elements in the periodic table."},
-    {q:"Water (H₂O) is made of which elements?",                           opts:["H & N","H & O","O & C","N & O"],                     ans:1,exp:"Water is composed of two hydrogen atoms bonded to one oxygen atom."},
-  ],
-  astronomy:[
-    {q:"What is the largest planet in our solar system?",                   opts:["Saturn","Uranus","Jupiter","Neptune"],                ans:2,exp:"Jupiter is the largest planet, with a mass greater than all other planets combined."},
-    {q:"Approximate distance from Earth to the Moon?",                      opts:["150,000 km","384,400 km","1.2M km","56,000 km"],     ans:1,exp:"The Moon orbits at roughly 384,400 km from Earth on average."},
-    {q:"What type of galaxy is the Milky Way?",                             opts:["Elliptical","Irregular","Barred Spiral","Ring"],      ans:2,exp:"The Milky Way is a barred spiral galaxy with a central bar structure and spiral arms."},
-  ],
-  mathematics:[
-    {q:"What is the value of π to two decimal places?",                     opts:["3.12","3.14","3.16","3.18"],                          ans:1,exp:"Pi ≈ 3.14159… It is the ratio of a circle's circumference to its diameter."},
-    {q:"What is the derivative of x²?",                                     opts:["x","2x","x²","2x²"],                                 ans:1,exp:"By the power rule, the derivative of x² is 2x."},
-    {q:"The interior angles of a triangle always sum to:",                  opts:["90°","180°","270°","360°"],                          ans:1,exp:"The interior angles of any triangle in Euclidean geometry always sum to 180°."},
-  ],
-  arts:[
-    {q:"Who painted the Mona Lisa?",                                        opts:["Raphael","Michelangelo","Leonardo da Vinci","Botticelli"],ans:2,exp:"Leonardo da Vinci painted the Mona Lisa between approximately 1503 and 1519."},
-    {q:"Which musical term means to play very softly?",                     opts:["Forte","Pianissimo","Mezzo","Allegro"],               ans:1,exp:"Pianissimo (pp) means to play very softly in musical notation."},
-    {q:"The Guggenheim Museum in New York was designed by:",                opts:["Mies van der Rohe","Le Corbusier","Frank Lloyd Wright","Zaha Hadid"],ans:2,exp:"Frank Lloyd Wright designed the Guggenheim Museum, completed in 1959."},
-  ],
+const QUESTIONS={
+history:{
+easy:[
+  {q:"Who was the first President of the United States?",opts:["Benjamin Franklin","George Washington","John Adams","Thomas Jefferson"],ans:1,exp:"George Washington served as the first U.S. President from 1789 to 1797."},
+  {q:"In which year did World War II end?",opts:["1943","1944","1945","1946"],ans:2,exp:"WWII ended in 1945 — Germany surrendered in May, Japan in September."},
+  {q:"Which empire built the Colosseum?",opts:["Greek","Ottoman","Roman","Byzantine"],ans:2,exp:"The Roman Colosseum was built between 70–80 AD under emperors Vespasian and Titus."},
+  {q:"Christopher Columbus reached the Americas in which year?",opts:["1488","1492","1498","1502"],ans:1,exp:"Columbus reached the Americas in 1492, funded by the Spanish Crown."},
+  {q:"The Berlin Wall fell in which year?",opts:["1987","1988","1989","1991"],ans:2,exp:"The Berlin Wall fell on November 9, 1989, marking the end of Cold War division."}
+],
+medium:[
+  {q:"Which Roman emperor converted the empire to Christianity?",opts:["Nero","Caligula","Constantine","Diocletian"],ans:2,exp:"Constantine I legalized Christianity via the Edict of Milan in 313 AD."},
+  {q:"The French Revolution began in which year?",opts:["1776","1783","1789","1799"],ans:2,exp:"The French Revolution began in 1789 with the storming of the Bastille on July 14."},
+  {q:"Which dynasty built most of the Great Wall of China seen today?",opts:["Han","Tang","Ming","Qing"],ans:2,exp:"Most of the Great Wall seen today was built during the Ming Dynasty (1368–1644)."},
+  {q:"The Magna Carta was signed in which year?",opts:["1066","1215","1348","1453"],ans:1,exp:"King John of England signed the Magna Carta in 1215, limiting royal power."},
+  {q:"Which country was NOT part of the Allied Powers in WWII?",opts:["USA","France","Japan","Soviet Union"],ans:2,exp:"Japan was part of the Axis Powers, allied with Nazi Germany and Fascist Italy."}
+],
+hard:[
+  {q:"The Battle of Thermopylae (480 BC) was fought between Sparta and which empire?",opts:["Roman","Persian","Macedonian","Carthaginian"],ans:1,exp:"King Leonidas led 300 Spartans against the Persian forces of Xerxes I at Thermopylae."},
+  {q:"Which treaty officially ended World War I?",opts:["Treaty of Paris","Treaty of Utrecht","Treaty of Versailles","Treaty of Westphalia"],ans:2,exp:"The Treaty of Versailles in 1919 officially ended WWI, imposing heavy reparations on Germany."},
+  {q:"The Thirty Years War (1618–1648) was primarily fought in:",opts:["Italy","France","The Holy Roman Empire","Spain"],ans:2,exp:"The war devastated the Holy Roman Empire (modern Germany), killing up to a third of its population."},
+  {q:"Who led the Haitian Revolution, the first successful slave revolt in history?",opts:["Simon Bolívar","Toussaint Louverture","Jean-Jacques Dessalines","Henri Christophe"],ans:1,exp:"Toussaint Louverture led the Haitian Revolution (1791–1804), creating the first Black republic."},
+  {q:"The Sykes-Picot Agreement (1916) secretly divided which region between Britain and France?",opts:["Africa","South Asia","The Middle East","Central Asia"],ans:2,exp:"The Sykes-Picot Agreement divided the Arab provinces of the Ottoman Empire into British and French spheres."}
+]},
+philosophy:{
+easy:[
+  {q:"Who is known as the father of Western philosophy?",opts:["Plato","Aristotle","Socrates","Descartes"],ans:2,exp:"Socrates (470–399 BC) is widely regarded as the father of Western philosophy."},
+  {q:"'I think, therefore I am' was said by:",opts:["Kant","Hume","Descartes","Leibniz"],ans:2,exp:"René Descartes wrote 'Cogito, ergo sum' as the foundation of his philosophical method."},
+  {q:"Which philosophy focuses on living in harmony with nature and reason?",opts:["Epicureanism","Stoicism","Nihilism","Existentialism"],ans:1,exp:"Stoicism teaches living according to reason and nature, regardless of external circumstances."},
+  {q:"Plato's famous work describing the ideal state is called:",opts:["The Symposium","The Republic","Nicomachean Ethics","Metaphysics"],ans:1,exp:"Plato's 'The Republic' describes justice and the ideal philosophical city-state."},
+  {q:"Which philosopher wrote 'Critique of Pure Reason'?",opts:["Hegel","Schopenhauer","Kant","Nietzsche"],ans:2,exp:"Immanuel Kant wrote 'Critique of Pure Reason' (1781), transforming modern philosophy."}
+],
+medium:[
+  {q:"Existentialism is most associated with which philosopher?",opts:["Kant","Hegel","Marx","Sartre"],ans:3,exp:"Jean-Paul Sartre is the central figure of existentialism, arguing 'existence precedes essence.'"},
+  {q:"The concept of the Übermensch (Overman) comes from:",opts:["Hegel","Marx","Nietzsche","Kierkegaard"],ans:2,exp:"Friedrich Nietzsche introduced the Übermensch in 'Thus Spoke Zarathustra' (1883)."},
+  {q:"Utilitarianism holds that the right action is what:",opts:["Follows moral rules","Maximizes overall happiness","Respects individual rights","Reflects God's will"],ans:1,exp:"Utilitarianism (Bentham, Mill) says the right action produces the greatest good for the greatest number."},
+  {q:"Which philosopher argued that 'God is dead'?",opts:["Marx","Schopenhauer","Nietzsche","Heidegger"],ans:2,exp:"Nietzsche declared 'God is dead' in 'The Gay Science' (1882), meaning religion lost its central cultural role."},
+  {q:"Plato's Allegory of the Cave illustrates:",opts:["The nature of democracy","The difference between appearance and reality","The importance of education","The soul's immortality"],ans:1,exp:"The Allegory shows that most people mistake shadows (appearances) for reality."}
+],
+hard:[
+  {q:"Kant's Categorical Imperative states you should act only according to:",opts:["What brings you happiness","What God commands","Principles you could will to be universal laws","What benefits society most"],ans:2,exp:"Kant's first formulation: act only on maxims you could universalize without contradiction."},
+  {q:"Which pre-Socratic philosopher believed everything is made of water?",opts:["Heraclitus","Anaximenes","Thales","Pythagoras"],ans:2,exp:"Thales of Miletus (c.624–548 BC) proposed water as the fundamental substance of all things."},
+  {q:"Hegel's concept of history developing through contradiction is called:",opts:["Empiricism","Dialectics","Phenomenology","Hermeneutics"],ans:1,exp:"Hegel's dialectical method: thesis meets antithesis, producing a synthesis — driving historical progress."},
+  {q:"'Being and Nothingness' was written by:",opts:["Heidegger","Camus","Sartre","Merleau-Ponty"],ans:2,exp:"Jean-Paul Sartre wrote 'Being and Nothingness' (1943), the foundational text of atheistic existentialism."},
+  {q:"The Epicurean paradox challenges theism by asking how an all-powerful good God:",opts:["Created the universe","Allows evil to exist","Answers prayers","Interacts with matter"],ans:1,exp:"The Epicurean paradox (attributed to Epicurus) questions how omnipotent goodness can coexist with evil."}
+]},
+mathematics:{
+easy:[
+  {q:"What is the value of π to two decimal places?",opts:["3.12","3.14","3.16","3.18"],ans:1,exp:"Pi (π) ≈ 3.14159… It is the ratio of a circle's circumference to its diameter."},
+  {q:"What is the square root of 144?",opts:["11","12","13","14"],ans:1,exp:"12 × 12 = 144, so √144 = 12."},
+  {q:"A triangle's interior angles always sum to:",opts:["90°","180°","270°","360°"],ans:1,exp:"In Euclidean geometry, the interior angles of any triangle always sum to exactly 180°."},
+  {q:"What is 15% of 200?",opts:["25","30","35","40"],ans:1,exp:"15% of 200 = 0.15 × 200 = 30."},
+  {q:"The formula for the area of a circle is:",opts:["2πr","πr²","πd","2πr²"],ans:1,exp:"Area of a circle = πr², where r is the radius."}
+],
+medium:[
+  {q:"What is the derivative of sin(x)?",opts:["cos(x)","-cos(x)","tan(x)","-sin(x)"],ans:0,exp:"The derivative of sin(x) is cos(x) — a fundamental result in calculus."},
+  {q:"The Fibonacci sequence starts 0, 1, 1, 2, 3, 5… What comes next?",opts:["7","8","9","10"],ans:1,exp:"Each number is the sum of the two before it: 3+5 = 8."},
+  {q:"Which of these is NOT a prime number?",opts:["17","19","21","23"],ans:2,exp:"21 = 3 × 7, so it is not prime. 17, 19, and 23 are all prime."},
+  {q:"What is log₁₀(1000)?",opts:["2","3","4","100"],ans:1,exp:"log₁₀(1000) = 3 because 10³ = 1000."},
+  {q:"Pythagoras' theorem states that in a right triangle: a² + b² = ?",opts:["c","c²","2c","(a+b)²"],ans:1,exp:"a² + b² = c² where c is the hypotenuse (the side opposite the right angle)."}
+],
+hard:[
+  {q:"Euler's Identity, called the most beautiful equation, is:",opts:["e^iπ + 1 = 0","e^π = -1","i² = -1","ln(e) = 1"],ans:0,exp:"Euler's Identity e^(iπ)+1=0 connects five fundamental constants: e, i, π, 1, and 0."},
+  {q:"The Königsberg Bridge Problem was solved by:",opts:["Gauss","Newton","Euler","Fermat"],ans:2,exp:"Leonhard Euler solved it in 1736, founding the field of graph theory."},
+  {q:"Gödel's Incompleteness Theorem states that in any consistent formal system:",opts:["All true statements can be proven","There exist true statements that cannot be proven","Mathematics is inconsistent","Logic cannot exist without axioms"],ans:1,exp:"Gödel (1931) proved every consistent system contains true statements that cannot be proven within it."},
+  {q:"The integral of 1/x dx is:",opts:["1/x²","x","ln|x| + C","-1/x² + C"],ans:2,exp:"∫(1/x)dx = ln|x| + C. The natural logarithm is the antiderivative of 1/x."},
+  {q:"Who proved Fermat's Last Theorem in 1995?",opts:["Terence Tao","Grigori Perelman","Andrew Wiles","John Nash"],ans:2,exp:"Andrew Wiles proved Fermat's Last Theorem in 1995 after ~358 years — that aⁿ+bⁿ=cⁿ has no integer solutions for n>2."}
+]},
+astronomy:{
+easy:[
+  {q:"How many planets are in our solar system?",opts:["7","8","9","10"],ans:1,exp:"There are 8 planets. Pluto was reclassified as a dwarf planet in 2006."},
+  {q:"What is the closest star to Earth (besides the Sun)?",opts:["Sirius","Betelgeuse","Proxima Centauri","Vega"],ans:2,exp:"Proxima Centauri is the nearest star, about 4.24 light-years away."},
+  {q:"What is the largest planet in our solar system?",opts:["Saturn","Uranus","Jupiter","Neptune"],ans:2,exp:"Jupiter is the largest planet, with a mass greater than all other planets combined."},
+  {q:"A light-year is a measure of:",opts:["Time","Mass","Distance","Speed"],ans:2,exp:"A light-year is the distance light travels in one year — about 9.46 trillion kilometres."},
+  {q:"What causes a lunar eclipse?",opts:["Moon blocks the Sun","Earth blocks sunlight from the Moon","Moon moves away from Earth","Venus reflects light onto Moon"],ans:1,exp:"A lunar eclipse occurs when Earth moves between the Sun and Moon, casting its shadow on the Moon."}
+],
+medium:[
+  {q:"What type of galaxy is the Milky Way?",opts:["Elliptical","Irregular","Barred Spiral","Ring"],ans:2,exp:"The Milky Way is a barred spiral galaxy with a central bar and winding spiral arms."},
+  {q:"What is the name of the black hole at the center of the Milky Way?",opts:["M87*","Cygnus X-1","Sagittarius A*","NGC 1277"],ans:2,exp:"Sagittarius A* is the supermassive black hole at our galaxy's center, with ~4 million solar masses."},
+  {q:"The Big Bang occurred approximately how many years ago?",opts:["4.5 billion","10 billion","13.8 billion","20 billion"],ans:2,exp:"The Big Bang occurred approximately 13.8 billion years ago."},
+  {q:"Which planet has the longest day in our solar system?",opts:["Mercury","Venus","Mars","Jupiter"],ans:1,exp:"Venus rotates so slowly that one Venusian day (243 Earth days) is longer than its year."},
+  {q:"What are pulsars?",opts:["Exploding stars","Rapidly rotating neutron stars emitting beams of radiation","Failed stars with no fusion","Giant gas clouds"],ans:1,exp:"Pulsars are rotating neutron stars that emit regular beams of radiation like cosmic lighthouses."}
+],
+hard:[
+  {q:"The Chandrasekhar Limit (~1.4 solar masses) defines the maximum mass of a:",opts:["Neutron star","White dwarf","Brown dwarf","Main sequence star"],ans:1,exp:"The Chandrasekhar Limit is the max mass a white dwarf can have before collapsing further."},
+  {q:"What is dark energy thought to be causing?",opts:["Galaxy formation","Accelerating expansion of the universe","Gravitational lensing","Cosmic microwave background"],ans:1,exp:"Dark energy (~68% of the universe) drives the accelerating expansion of space."},
+  {q:"The Cosmic Microwave Background is the afterglow of:",opts:["The first stars igniting","The Big Bang","A massive gamma-ray burst","The formation of the Milky Way"],ans:1,exp:"The CMB is radiation from ~380,000 years after the Big Bang, when atoms first formed."},
+  {q:"Gravitational waves were first directly detected in:",opts:["1998","2005","2012","2015"],ans:3,exp:"LIGO first detected gravitational waves in September 2015 from two merging black holes."},
+  {q:"The Schwarzschild Radius defines:",opts:["A planet's orbital period","The event horizon size of a black hole","The distance planets form from a star","Neutron star rotation speed"],ans:1,exp:"The Schwarzschild Radius is where escape velocity equals light speed — defining the event horizon."}
+]},
+biology:{
+easy:[
+  {q:"What is the powerhouse of the cell?",opts:["Nucleus","Ribosome","Mitochondria","Cell membrane"],ans:2,exp:"Mitochondria produce ATP through cellular respiration, providing energy for all cell functions."},
+  {q:"DNA stands for:",opts:["Deoxyribonucleic Acid","Dual Nucleic Acid","Deoxyribose Natural Acid","Dynamic Nucleic Acid"],ans:0,exp:"DNA (Deoxyribonucleic Acid) carries genetic information in living organisms."},
+  {q:"Photosynthesis occurs in which part of a plant cell?",opts:["Mitochondria","Nucleus","Chloroplast","Vacuole"],ans:2,exp:"Chloroplasts contain chlorophyll, which absorbs sunlight to power photosynthesis."},
+  {q:"How many chromosomes do humans have?",opts:["23","44","46","48"],ans:2,exp:"Humans have 46 chromosomes — 23 pairs, one set from each parent."},
+  {q:"What type of blood cell fights infection?",opts:["Red blood cells","Platelets","White blood cells","Plasma"],ans:2,exp:"White blood cells (leukocytes) are the immune system's fighters against pathogens."}
+],
+medium:[
+  {q:"Who proposed the theory of evolution by natural selection?",opts:["Gregor Mendel","Louis Pasteur","Charles Darwin","Alfred Wallace"],ans:2,exp:"Charles Darwin published 'On the Origin of Species' in 1859, outlining evolution by natural selection."},
+  {q:"What is the function of ribosomes?",opts:["Energy production","Protein synthesis","DNA replication","Waste removal"],ans:1,exp:"Ribosomes read mRNA and synthesize (build) proteins — the workhorses of cellular function."},
+  {q:"The human brain is primarily composed of:",opts:["Blood cells","Epithelial cells","Neurons and glial cells","Stem cells"],ans:2,exp:"The brain contains ~86 billion neurons and supporting glial cells."},
+  {q:"CRISPR-Cas9 is a technology used for:",opts:["Vaccine production","Gene editing","Cell cloning","Protein folding"],ans:1,exp:"CRISPR-Cas9 allows scientists to precisely edit DNA sequences."},
+  {q:"Which blood type is the universal donor?",opts:["A","B","AB","O negative"],ans:3,exp:"Type O negative red blood cells can be given to any patient regardless of their blood type."}
+],
+hard:[
+  {q:"The Hardy-Weinberg Equilibrium describes a population that is:",opts:["Rapidly evolving","Genetically stable with no evolution","Experiencing genetic drift","Under natural selection"],ans:1,exp:"Hardy-Weinberg describes an ideal population with no evolution — no mutation, selection, or drift."},
+  {q:"Which enzyme synthesizes new DNA strands during replication?",opts:["RNA polymerase","DNA ligase","Helicase","DNA polymerase"],ans:3,exp:"DNA polymerase synthesizes new strands during replication, reading the template strand."},
+  {q:"Apoptosis is the process of:",opts:["Cell division","Programmed cell death","Protein synthesis","Cell mutation"],ans:1,exp:"Apoptosis is programmed cell death — a controlled process vital for development and removing damaged cells."},
+  {q:"Which domain of life includes organisms that survive extreme environments?",opts:["Bacteria","Eukarya","Archaea","Protista"],ans:2,exp:"Archaea (extremophiles) thrive in environments like hot springs, salt lakes, and deep-sea vents."},
+  {q:"The lac operon in E. coli is an example of:",opts:["DNA repair","Transcriptional gene regulation","Post-translational modification","Chromosomal crossover"],ans:1,exp:"The lac operon is a classic example of gene regulation — genes switched on/off based on lactose."}
+]},
+chemistry:{
+easy:[
+  {q:"What is the chemical formula for water?",opts:["WA","HO","H2O","W2O"],ans:2,exp:"Water is H₂O — two hydrogen atoms bonded to one oxygen atom."},
+  {q:"What is the chemical symbol for Gold?",opts:["Go","Gd","Au","Ag"],ans:2,exp:"Gold's symbol Au comes from the Latin word Aurum."},
+  {q:"How many elements are in the periodic table?",opts:["108","112","118","124"],ans:2,exp:"As of 2024, there are 118 confirmed elements in the periodic table."},
+  {q:"What is the most abundant gas in Earth's atmosphere?",opts:["Oxygen","Carbon dioxide","Argon","Nitrogen"],ans:3,exp:"Nitrogen (N₂) makes up about 78% of Earth's atmosphere."},
+  {q:"Acids have a pH value that is:",opts:["Greater than 7","Equal to 7","Less than 7","Equal to 14"],ans:2,exp:"Acids have a pH below 7. pH 7 is neutral; above 7 is alkaline."}
+],
+medium:[
+  {q:"What is the atomic number of Carbon?",opts:["4","6","8","12"],ans:1,exp:"Carbon has atomic number 6, meaning it has 6 protons. It is the basis of all organic chemistry."},
+  {q:"Which type of bond involves the sharing of electrons?",opts:["Ionic bond","Covalent bond","Hydrogen bond","Metallic bond"],ans:1,exp:"Covalent bonds form when atoms share electrons — common in organic molecules."},
+  {q:"What is the process of a solid turning directly into a gas called?",opts:["Evaporation","Condensation","Sublimation","Fusion"],ans:2,exp:"Sublimation is the direct phase transition from solid to gas (e.g., dry ice)."},
+  {q:"Avogadro's number (6.022 × 10²³) represents the number of particles in:",opts:["One gram","One mole","One litre","One atom"],ans:1,exp:"One mole of any substance contains 6.022 × 10²³ particles."},
+  {q:"Which element is the most reactive alkali metal?",opts:["Lithium","Sodium","Potassium","Caesium"],ans:3,exp:"Caesium (Cs) is the most reactive stable alkali metal, reacting violently with water."}
+],
+hard:[
+  {q:"The Heisenberg Uncertainty Principle states you cannot simultaneously know a particle's:",opts:["Mass and charge","Position and momentum","Speed and temperature","Energy and wavelength"],ans:1,exp:"The more precisely you know a particle's position, the less precisely you can know its momentum."},
+  {q:"In organic chemistry, a benzene ring is described as:",opts:["Tetrahedral","Aliphatic","Aromatic","Saturated"],ans:2,exp:"Benzene is the simplest aromatic compound with a ring of 6 carbons and delocalized electrons."},
+  {q:"Le Chatelier's Principle states a system at equilibrium will:",opts:["Remain unchanged","Shift to oppose an imposed change","Always increase temperature","Reduce reactant concentration"],ans:1,exp:"A stressed equilibrium shifts to counteract that stress and restore balance."},
+  {q:"Which quantum number describes the shape of an atomic orbital?",opts:["Principal (n)","Angular momentum (l)","Magnetic (ml)","Spin (ms)"],ans:1,exp:"The angular momentum quantum number (l) defines orbital shape: s, p, d, or f."},
+  {q:"According to the Second Law of Thermodynamics, entropy of the universe:",opts:["Always decreases","Stays constant","Always increases","Oscillates"],ans:2,exp:"In any spontaneous process, total entropy (disorder) of the universe always increases."}
+]},
+physics:{
+easy:[
+  {q:"What is the speed of light in a vacuum?",opts:["300,000 km/s","150,000 km/s","3,000 km/s","30,000 km/s"],ans:0,exp:"Light travels at approximately 299,792 km/s in a vacuum."},
+  {q:"Newton's First Law states that an object at rest will:",opts:["Slowly stop","Start moving","Remain at rest unless acted upon by a force","Accelerate downward"],ans:2,exp:"Newton's Law of Inertia: objects stay at rest or in uniform motion unless a net force acts."},
+  {q:"What unit measures electrical resistance?",opts:["Volt","Ampere","Watt","Ohm"],ans:3,exp:"Electrical resistance is measured in Ohms (Ω), named after physicist Georg Ohm."},
+  {q:"Which force keeps planets in orbit around the Sun?",opts:["Magnetism","Electromagnetism","Gravity","Nuclear force"],ans:2,exp:"Gravity — the attractive force between masses — keeps planets in elliptical orbits."},
+  {q:"E=mc² was formulated by:",opts:["Newton","Bohr","Tesla","Einstein"],ans:3,exp:"Albert Einstein's mass-energy equivalence from his 1905 special relativity paper."}
+],
+medium:[
+  {q:"What is the SI unit of force?",opts:["Pascal","Joule","Newton","Watt"],ans:2,exp:"Force is measured in Newtons (N). 1 N = 1 kg⋅m/s²."},
+  {q:"Why is the sky blue?",opts:["Refraction","Reflection","Rayleigh scattering","Diffraction"],ans:2,exp:"Rayleigh scattering: sunlight hits atmospheric particles and shorter blue wavelengths scatter more."},
+  {q:"Ohm's Law states that V = ?",opts:["I/R","IR","I+R","I²R"],ans:1,exp:"Voltage (V) = Current (I) × Resistance (R)."},
+  {q:"Which type of wave does NOT require a medium to travel?",opts:["Sound","Seismic","Electromagnetic","Water"],ans:2,exp:"Electromagnetic waves (light, radio, X-rays) can travel through a vacuum."},
+  {q:"Two waves canceling each other out is called:",opts:["Resonance","Constructive interference","Diffraction","Destructive interference"],ans:3,exp:"Destructive interference occurs when two waves meet out of phase, reducing amplitude."}
+],
+hard:[
+  {q:"Schrödinger's Cat thought experiment illustrates problems with:",opts:["Special relativity","Quantum superposition","General relativity","Thermodynamics"],ans:1,exp:"Schrödinger's Cat shows the absurdity of applying quantum superposition to macroscopic objects."},
+  {q:"The Pauli Exclusion Principle states no two fermions can:",opts:["Have the same mass","Occupy the same quantum state simultaneously","Move at the same speed","Interact electromagnetically"],ans:1,exp:"No two identical fermions (like electrons) can share the exact same quantum state."},
+  {q:"A black hole's event horizon represents:",opts:["Its center","The edge of its magnetic field","The point of no return for light","Its accretion disk"],ans:2,exp:"The event horizon is the boundary beyond which nothing — not even light — can escape."},
+  {q:"The photoelectric effect was explained by:",opts:["Maxwell","Planck","Einstein","Bohr"],ans:2,exp:"Einstein explained the photoelectric effect in 1905 using photon theory, earning him the Nobel Prize."},
+  {q:"Which fundamental force holds atomic nuclei together?",opts:["Gravity","Electromagnetism","Weak nuclear force","Strong nuclear force"],ans:3,exp:"The strong nuclear force binds protons and neutrons in the nucleus, overcoming electromagnetic repulsion."}
+]},
+psychology:{
+easy:[
+  {q:"Who is the father of psychoanalysis?",opts:["Jung","Adler","Freud","Skinner"],ans:2,exp:"Sigmund Freud founded psychoanalysis, emphasizing the role of the unconscious mind."},
+  {q:"Classical conditioning was discovered by:",opts:["Watson","Pavlov","Skinner","Bandura"],ans:1,exp:"Ivan Pavlov discovered classical conditioning through experiments with dogs and a bell."},
+  {q:"The fight-or-flight response is triggered by which nervous system?",opts:["Parasympathetic","Sympathetic","Somatic","Enteric"],ans:1,exp:"The sympathetic nervous system activates the fight-or-flight response to danger."},
+  {q:"Maslow's Hierarchy of Needs places which need at the very top?",opts:["Safety","Love","Esteem","Self-actualization"],ans:3,exp:"Self-actualization — reaching your full potential — sits at the peak of Maslow's pyramid."},
+  {q:"Which brain region is most associated with emotion and memory?",opts:["Cerebellum","Frontal lobe","Amygdala","Brain stem"],ans:2,exp:"The amygdala is the brain's emotional center, especially involved in fear and memory formation."}
+],
+medium:[
+  {q:"The Stanford Prison Experiment was conducted by:",opts:["Milgram","Zimbardo","Bandura","Asch"],ans:1,exp:"Philip Zimbardo's 1971 experiment showed how ordinary people adopt brutal roles in institutions."},
+  {q:"The Dunning-Kruger effect describes:",opts:["Fear of crowds","Overconfidence of low-skilled people","Memory loss under stress","Social conformity"],ans:1,exp:"People with limited knowledge overestimate their competence, while experts underestimate themselves."},
+  {q:"Operant conditioning was developed by:",opts:["Pavlov","Watson","Freud","Skinner"],ans:3,exp:"B.F. Skinner developed operant conditioning, using reinforcement and punishment to shape behavior."},
+  {q:"Which attachment style results from inconsistent parenting?",opts:["Secure","Avoidant","Anxious","Disorganized"],ans:2,exp:"Anxious attachment develops when caregiving is unpredictable, creating fear of abandonment."},
+  {q:"'Hindsight bias' is best described as:",opts:["Fear of the future","The 'I knew it all along' phenomenon","Overestimating others' knowledge","Selective memory of trauma"],ans:1,exp:"Hindsight bias is overestimating our prior ability to predict events after they've occurred."}
+],
+hard:[
+  {q:"Carl Jung's term for the unconscious opposite of one's public persona is:",opts:["Anima","Shadow","Self","Persona"],ans:1,exp:"Jung called the dark, unconscious side of personality the 'Shadow' — repressed parts of the self."},
+  {q:"The Milgram Obedience Experiment found approximately what percentage delivered the highest shock?",opts:["25%","45%","65%","85%"],ans:2,exp:"About 65% of participants obeyed authority and delivered what they believed were lethal shocks."},
+  {q:"Which theory proposes emotions arise from interpreting physiological states?",opts:["James-Lange Theory","Cannon-Bard Theory","Schachter-Singer Theory","Lazarus Theory"],ans:0,exp:"James-Lange Theory: we experience emotion as a result of our interpretation of bodily responses."},
+  {q:"Theory of Mind refers to the ability to:",opts:["Understand physics intuitively","Attribute mental states to others","Control one's own thoughts","Think abstractly"],ans:1,exp:"Theory of Mind is understanding that others have beliefs, desires, and intentions different from your own."},
+  {q:"Broca's area, associated with speech production, is located in the:",opts:["Right temporal lobe","Left frontal lobe","Right parietal lobe","Left occipital lobe"],ans:1,exp:"Broca's area is in the left frontal lobe. Damage causes Broca's aphasia — difficulty producing speech."}
+]},
+economics:{
+easy:[
+  {q:"What does GDP stand for?",opts:["General Domestic Product","Gross Domestic Product","Global Distribution Price","Government Debt Policy"],ans:1,exp:"GDP (Gross Domestic Product) measures the total value of goods and services a country produces."},
+  {q:"Inflation means that prices are:",opts:["Falling","Stable","Rising","Unpredictable"],ans:2,exp:"Inflation is the rate at which the general level of prices rises, reducing purchasing power."},
+  {q:"Opportunity cost means:",opts:["The price of a product","The cost of the next-best alternative foregone","The government's tax","The interest rate"],ans:1,exp:"Opportunity cost is the value of the best alternative you give up when making a decision."},
+  {q:"Which type of economy is controlled by the government?",opts:["Market economy","Mixed economy","Command economy","Traditional economy"],ans:2,exp:"In a command (planned) economy, the government controls production, prices, and distribution."},
+  {q:"Supply and demand primarily determines:",opts:["Government policy","Market prices","Tax rates","Population growth"],ans:1,exp:"The interaction of supply and demand determines prices in a free market economy."}
+],
+medium:[
+  {q:"Who wrote 'The Wealth of Nations' (1776)?",opts:["Karl Marx","John Maynard Keynes","Adam Smith","Milton Friedman"],ans:2,exp:"Adam Smith's 'Wealth of Nations' laid the foundations of modern economics and free market theory."},
+  {q:"A market dominated by a single seller is called a:",opts:["Oligopoly","Monopoly","Duopoly","Monopsony"],ans:1,exp:"A monopoly exists when one company controls the entire supply of a product or service."},
+  {q:"The 'invisible hand' concept comes from which economist?",opts:["Keynes","Marx","Smith","Friedman"],ans:2,exp:"Adam Smith's 'invisible hand' describes how self-interest unintentionally benefits society."},
+  {q:"Quantitative Easing (QE) involves a central bank:",opts:["Raising taxes","Buying government bonds to inject money","Cutting spending","Increasing interest rates"],ans:1,exp:"QE is when a central bank buys bonds to increase money supply and stimulate the economy."},
+  {q:"The Gini Coefficient measures:",opts:["GDP growth","Income inequality","Inflation","Trade balance"],ans:1,exp:"The Gini Coefficient measures income or wealth inequality within a population (0=perfect equality)."}
+],
+hard:[
+  {q:"The Laffer Curve illustrates the relationship between:",opts:["GDP and employment","Tax rates and tax revenue","Inflation and interest rates","Supply and demand"],ans:1,exp:"The Laffer Curve shows that beyond an optimal tax rate, higher taxes reduce revenue."},
+  {q:"Keynes argued that during recessions, governments should:",opts:["Cut spending and raise taxes","Do nothing","Increase spending to stimulate demand","Reduce the money supply"],ans:2,exp:"Keynesian economics advocates government stimulus spending to boost aggregate demand."},
+  {q:"The Tragedy of the Commons describes:",opts:["Government corruption","Overexploitation of shared resources","Market monopolies","Tax evasion"],ans:1,exp:"Individuals deplete shared resources acting in self-interest, ultimately harming the collective."},
+  {q:"The Phillips Curve suggests an inverse relationship between:",opts:["GDP and trade","Inflation and unemployment","Interest rates and investment","Money supply and prices"],ans:1,exp:"The Phillips Curve shows lower unemployment tends to correlate with higher inflation, and vice versa."},
+  {q:"'Creative destruction' is a concept coined by:",opts:["Marx","Keynes","Schumpeter","Hayek"],ans:2,exp:"Joseph Schumpeter's 'creative destruction' describes how innovation constantly disrupts and replaces old industries."}
+]},
+geography:{
+easy:[
+  {q:"What is the largest continent by area?",opts:["Africa","North America","Europe","Asia"],ans:3,exp:"Asia covers about 44.6 million km² — roughly 30% of Earth's land area."},
+  {q:"The Amazon River flows through which continent?",opts:["Africa","South America","Asia","North America"],ans:1,exp:"The Amazon, the world's largest river by volume, flows mainly through Brazil."},
+  {q:"What is the capital of Australia?",opts:["Sydney","Melbourne","Canberra","Brisbane"],ans:2,exp:"Canberra is Australia's capital, purpose-built as a compromise between Sydney and Melbourne."},
+  {q:"Mount Everest is located in which mountain range?",opts:["Alps","Andes","Rockies","Himalayas"],ans:3,exp:"Mount Everest (8,848m) is in the Himalayas on the Nepal-Tibet border."},
+  {q:"Which ocean is the largest?",opts:["Atlantic","Indian","Arctic","Pacific"],ans:3,exp:"The Pacific Ocean covers about 165 million km² — larger than all of Earth's landmasses combined."}
+],
+medium:[
+  {q:"Which country has the most natural freshwater lakes?",opts:["Russia","Brazil","USA","Canada"],ans:3,exp:"Canada has about 60% of the world's freshwater lakes — over 31,000 larger than 3 km²."},
+  {q:"Which country is located in both Europe and Asia?",opts:["Kazakhstan","Georgia","Turkey","Russia"],ans:3,exp:"Russia straddles Europe and Asia, with ~77% of its territory in Asia."},
+  {q:"The Great Barrier Reef is off the coast of:",opts:["South Africa","New Zealand","Indonesia","Australia"],ans:3,exp:"The Great Barrier Reef off Queensland, Australia, is the world's largest coral reef system."},
+  {q:"Which river is the longest in Africa?",opts:["Congo","Niger","Zambezi","Nile"],ans:3,exp:"The Nile River (approximately 6,650 km) is the longest in Africa."},
+  {q:"The Sahara Desert covers approximately how much of Africa?",opts:["10%","20%","25%","30%"],ans:3,exp:"The Sahara covers about 31% (9.2 million km²) of the African continent."}
+],
+hard:[
+  {q:"The Mariana Trench, the deepest point on Earth, is in the:",opts:["Atlantic Ocean","Indian Ocean","Arctic Ocean","Pacific Ocean"],ans:3,exp:"The Mariana Trench in the western Pacific reaches ~11,034m at the Challenger Deep."},
+  {q:"Which tectonic plates collided to form the Himalayas?",opts:["Pacific and North American","Eurasian and African","Indian and Eurasian","Arabian and Iranian"],ans:2,exp:"The Indian Plate colliding with the Eurasian Plate over ~50 million years created the Himalayas."},
+  {q:"Which African country has more pyramids than Egypt?",opts:["Ethiopia","Libya","Sudan","Chad"],ans:2,exp:"Sudan (ancient Nubia) has over 200 pyramids — more than Egypt, though smaller."},
+  {q:"The Coriolis Effect deflects winds in the Northern Hemisphere to the:",opts:["Left","Right","Upward","Downward"],ans:1,exp:"Due to Earth's rotation, the Coriolis Effect deflects winds to the right in the Northern Hemisphere."},
+  {q:"The Strait of Malacca separates:",opts:["Spain and Morocco","Japan and Korea","Malaysia and Sumatra","Sicily and Italy"],ans:2,exp:"The Strait of Malacca between the Malay Peninsula and Sumatra is one of the world's busiest shipping lanes."}
+]},
+literature:{
+easy:[
+  {q:"Who wrote 'Romeo and Juliet'?",opts:["Charles Dickens","William Shakespeare","Jane Austen","Homer"],ans:1,exp:"William Shakespeare wrote Romeo and Juliet around 1594–1596."},
+  {q:"'Harry Potter' was written by:",opts:["Tolkien","C.S. Lewis","J.K. Rowling","Philip Pullman"],ans:2,exp:"J.K. Rowling wrote the Harry Potter series, beginning with 'The Philosopher's Stone' in 1997."},
+  {q:"'1984' was written by:",opts:["Aldous Huxley","George Orwell","Ray Bradbury","H.G. Wells"],ans:1,exp:"George Orwell wrote '1984' (published 1949), a dystopian novel about totalitarianism."},
+  {q:"The Odyssey was written by:",opts:["Virgil","Sophocles","Homer","Ovid"],ans:2,exp:"Homer's Odyssey (c.8th century BC) follows Odysseus's decade-long journey home."},
+  {q:"'Pride and Prejudice' was written by:",opts:["Charlotte Brontë","Emily Brontë","Virginia Woolf","Jane Austen"],ans:3,exp:"Jane Austen published 'Pride and Prejudice' in 1813, centered on Elizabeth Bennet and Mr. Darcy."}
+],
+medium:[
+  {q:"Which novel begins with 'Call me Ishmael'?",opts:["The Old Man and the Sea","Billy Budd","Moby-Dick","Lord Jim"],ans:2,exp:"Herman Melville's 'Moby-Dick' (1851) opens with the iconic line 'Call me Ishmael.'"},
+  {q:"Franz Kafka's 'The Metamorphosis' begins with Gregor Samsa turning into:",opts:["A rat","A spider","A giant insect","A bird"],ans:2,exp:"Gregor Samsa wakes to find himself transformed into a monstrous insect."},
+  {q:"Who wrote 'One Hundred Years of Solitude'?",opts:["Pablo Neruda","Mario Vargas Llosa","Jorge Luis Borges","Gabriel García Márquez"],ans:3,exp:"García Márquez wrote this 1967 masterpiece, the defining work of magical realism."},
+  {q:"Dante's 'Divine Comedy' is divided into three parts. Which is NOT one of them?",opts:["Inferno","Purgatorio","Paradiso","Limbo"],ans:3,exp:"The Divine Comedy consists of Inferno, Purgatorio, and Paradiso."},
+  {q:"James Joyce's 'Ulysses' takes place over how many hours?",opts:["12","18","24","48"],ans:1,exp:"Ulysses (1922) follows Leopold Bloom through Dublin over roughly 18 hours on June 16, 1904."}
+],
+hard:[
+  {q:"Which poet wrote 'The Waste Land' (1922)?",opts:["Ezra Pound","W.B. Yeats","T.S. Eliot","W.H. Auden"],ans:2,exp:"T.S. Eliot published 'The Waste Land' in 1922, the defining poem of literary modernism."},
+  {q:"Dostoevsky's 'The Brothers Karamazov' deals centrally with:",opts:["A love triangle","Parricide and questions of faith","Political revolution","War and exile"],ans:1,exp:"The Brothers Karamazov (1880) explores parricide, free will, faith, and doubt."},
+  {q:"The 'Lost Generation' writers gathered in 1920s:",opts:["London","Berlin","Rome","Paris"],ans:3,exp:"American expatriates like Hemingway, Fitzgerald, and Stein gathered in Paris after WWI."},
+  {q:"'In Search of Lost Time' was written by:",opts:["Émile Zola","Gustave Flaubert","Victor Hugo","Marcel Proust"],ans:3,exp:"Marcel Proust wrote this 7-volume novel (1913–1927), exploring memory and time."},
+  {q:"Which Shakespeare play features the line 'To be, or not to be'?",opts:["Othello","Macbeth","Hamlet","King Lear"],ans:2,exp:"'To be, or not to be' is spoken by Prince Hamlet in Act 3, Scene 1 of Shakespeare's Hamlet."}
+]},
+arts:{
+easy:[
+  {q:"Who painted the Mona Lisa?",opts:["Raphael","Michelangelo","Leonardo da Vinci","Botticelli"],ans:2,exp:"Leonardo da Vinci painted the Mona Lisa between approximately 1503 and 1519."},
+  {q:"Which musical term means to play very softly?",opts:["Forte","Pianissimo","Mezzo","Allegro"],ans:1,exp:"Pianissimo (pp) means very soft. Forte (f) means loud."},
+  {q:"The Sistine Chapel ceiling was painted by:",opts:["Leonardo da Vinci","Raphael","Michelangelo","Caravaggio"],ans:2,exp:"Michelangelo painted the Sistine Chapel ceiling (1508–1512), including 'Creation of Adam.'"},
+  {q:"What art movement was Salvador Dalí associated with?",opts:["Impressionism","Surrealism","Cubism","Expressionism"],ans:1,exp:"Dalí was the most famous Surrealist, exploring dreams and distorted reality."},
+  {q:"Which composer wrote 'The Four Seasons'?",opts:["Bach","Mozart","Vivaldi","Handel"],ans:2,exp:"Antonio Vivaldi composed 'The Four Seasons' (c.1720), a set of four violin concertos."}
+],
+medium:[
+  {q:"The Guggenheim Museum in New York was designed by:",opts:["Mies van der Rohe","Le Corbusier","Frank Lloyd Wright","Zaha Hadid"],ans:2,exp:"Frank Lloyd Wright designed the Solomon R. Guggenheim Museum, completed in 1959."},
+  {q:"Cubism was pioneered by:",opts:["Monet and Renoir","Picasso and Braque","Dalí and Ernst","Kandinsky and Klee"],ans:1,exp:"Pablo Picasso and Georges Braque developed Cubism around 1907–1914."},
+  {q:"Which art movement used imagery from popular commercial culture?",opts:["Abstract Expressionism","Minimalism","Pop Art","Dadaism"],ans:2,exp:"Pop Art (1950s–60s) used imagery from advertising and popular culture — Warhol's soup cans are iconic."},
+  {q:"A 'leitmotif' in music is:",opts:["A type of instrument","A recurring theme associated with a character or idea","A musical key signature","A type of rhythm"],ans:1,exp:"A leitmotif is a recurring theme tied to a specific character or idea — famously used by Wagner."},
+  {q:"Which artist cut off part of his own ear in 1888?",opts:["Paul Gauguin","Georges Seurat","Vincent van Gogh","Toulouse-Lautrec"],ans:2,exp:"Vincent van Gogh cut off part of his left ear in December 1888 following a breakdown."}
+],
+hard:[
+  {q:"Notre-Dame Cathedral in Paris is built in which architectural style?",opts:["Romanesque","Baroque","Gothic","Neoclassical"],ans:2,exp:"Notre-Dame (begun 1163) is one of the finest examples of French Gothic architecture."},
+  {q:"Beethoven was almost entirely deaf when he composed his:",opts:["5th Symphony","6th Symphony","7th Symphony","9th Symphony"],ans:3,exp:"Beethoven was nearly deaf when he composed his Ninth Symphony (1824), including 'Ode to Joy.'"},
+  {q:"The Golden Ratio (approximately 1.618) is denoted by the Greek letter:",opts:["Pi","Phi","Epsilon","Lambda"],ans:1,exp:"The Golden Ratio is denoted by Phi (φ ≈ 1.618), appearing in art, architecture, and nature."},
+  {q:"The film technique of juxtaposing shots to create meaning is called:",opts:["Dissolve","Montage","Pan","Mise-en-scène"],ans:1,exp:"Montage (theorized by Eisenstein) juxtaposes shots — the collision of images creates meaning."},
+  {q:"Which Impressionist painter is known for his series of water lily paintings?",opts:["Renoir","Degas","Monet","Pissarro"],ans:2,exp:"Claude Monet painted over 250 water lily paintings at his garden in Giverny, France."}
+]},
+culture:{
+easy:[
+  {q:"Which religion has the most followers worldwide?",opts:["Islam","Hinduism","Buddhism","Christianity"],ans:3,exp:"Christianity is the world's largest religion with approximately 2.4 billion followers."},
+  {q:"Haiku poetry originates from which country?",opts:["China","Korea","Japan","Vietnam"],ans:2,exp:"Haiku is a traditional form of Japanese poetry in a 5-7-5 syllable pattern."},
+  {q:"Which ancient civilization built the pyramids at Giza?",opts:["Mesopotamian","Greek","Roman","Egyptian"],ans:3,exp:"The Ancient Egyptians built the pyramids at Giza around 2560 BC as royal tombs."},
+  {q:"Ramadan is the holy month of fasting in which religion?",opts:["Judaism","Hinduism","Islam","Sikhism"],ans:2,exp:"Ramadan is the 9th month of the Islamic calendar; Muslims fast from dawn to sunset."},
+  {q:"The Olympic Games originated in which country?",opts:["Italy","Greece","Turkey","Egypt"],ans:1,exp:"The ancient Olympic Games originated in Olympia, Greece, around 776 BC."}
+],
+medium:[
+  {q:"Which ancient wonder was located in Alexandria, Egypt?",opts:["The Colossus","Temple of Artemis","The Lighthouse","Hanging Gardens"],ans:2,exp:"The Lighthouse of Alexandria (c.280 BC) guided sailors for centuries."},
+  {q:"'Karma' is a concept central to which religion(s)?",opts:["Islam and Christianity","Hinduism and Buddhism","Judaism and Sikhism","Taoism and Confucianism"],ans:1,exp:"Karma (action and consequence) is central to both Hinduism and Buddhism."},
+  {q:"Which mythology features Zeus, Hera, and Poseidon?",opts:["Norse","Egyptian","Roman","Greek"],ans:3,exp:"Zeus, Hera, and Poseidon are Olympian gods from Ancient Greek mythology."},
+  {q:"Day of the Dead (Día de los Muertos) is a tradition from:",opts:["Spain","Brazil","Mexico","Argentina"],ans:2,exp:"Día de los Muertos is a Mexican tradition blending Aztec rituals with Catholicism."},
+  {q:"The Silk Road connected which two regions?",opts:["Europe and Africa","China and the Mediterranean","India and Southeast Asia","Arabia and Europe"],ans:1,exp:"The Silk Road connected China to the Mediterranean, facilitating trade and cultural exchange."}
+],
+hard:[
+  {q:"The Axial Age (800–200 BC) refers to simultaneous rise of thinkers in:",opts:["Only Europe","Greece, China, India, and Persia","Africa and the Americas","Egypt and Mesopotamia"],ans:1,exp:"Confucius, Buddha, Socrates, and Zarathustra all lived during the Axial Age."},
+  {q:"Which writing system is considered the world's oldest?",opts:["Egyptian Hieroglyphics","Chinese Oracle Bones","Sumerian Cuneiform","Indus Valley Script"],ans:2,exp:"Sumerian Cuneiform (c.3400 BC) is considered the world's oldest writing system."},
+  {q:"The concept of 'Wu Wei' (non-action) is central to:",opts:["Confucianism","Buddhism","Taoism","Shintoism"],ans:2,exp:"Wu Wei — effortless action aligned with nature — is the core principle of Taoism."},
+  {q:"The Rosetta Stone allowed scholars to:",opts:["Prove Egyptian civilization's age","Decipher Egyptian hieroglyphics","Map ancient trade routes","Record the first laws"],ans:1,exp:"The Rosetta Stone (196 BC) showed the same text in Greek and Hieroglyphics, enabling translation."},
+  {q:"Which sociologist coined the term 'anomie' to describe social normlessness?",opts:["Marx","Weber","Durkheim","Bourdieu"],ans:2,exp:"Émile Durkheim introduced 'anomie' to describe a state of normlessness when social bonds break down."}
+]},
+computersc:{
+easy:[
+  {q:"What does CPU stand for?",opts:["Central Processing Unit","Computer Power Unit","Central Program Utility","Computing Process Unit"],ans:0,exp:"The CPU (Central Processing Unit) is the brain of a computer, executing instructions."},
+  {q:"Which language structures web pages?",opts:["CSS","Python","HTML","JavaScript"],ans:2,exp:"HTML (HyperText Markup Language) defines the structure and content of web pages."},
+  {q:"What does 'bit' stand for in computing?",opts:["Binary Term","Binary Digit","Basic Integer","Byte Integer Transmission"],ans:1,exp:"A bit (binary digit) is the smallest unit of data — either a 0 or 1."},
+  {q:"What does 'URL' stand for?",opts:["Universal Resource Language","Uniform Resource Locator","Universal Routing Locator","United Reference Link"],ans:1,exp:"URL (Uniform Resource Locator) is the web address locating a resource on the internet."},
+  {q:"Which of these is NOT a programming language?",opts:["Python","Java","HTML","C++"],ans:2,exp:"HTML is a markup language, not a programming language. It structures content but has no logic."}
+],
+medium:[
+  {q:"What is the time complexity of binary search?",opts:["O(n)","O(n²)","O(log n)","O(1)"],ans:2,exp:"Binary search is O(log n) — each step halves the search space, making it very efficient."},
+  {q:"Which data structure works on Last In, First Out (LIFO)?",opts:["Queue","Linked List","Stack","Tree"],ans:2,exp:"A Stack is LIFO — the last element added is the first to be removed, like a stack of plates."},
+  {q:"What does HTTP stand for?",opts:["HyperText Transfer Protocol","Hyperlink Text Transmission Process","Host Transfer Protocol","HyperText Tracking Page"],ans:0,exp:"HTTP (HyperText Transfer Protocol) is the protocol for transferring data on the web."},
+  {q:"Which sorting algorithm has an average time complexity of O(n log n)?",opts:["Bubble sort","Insertion sort","Merge sort","Selection sort"],ans:2,exp:"Merge sort consistently achieves O(n log n) — far more efficient than O(n²) sorts."},
+  {q:"In object-oriented programming, 'inheritance' means:",opts:["Copying code manually","A class adopting properties of another class","Deleting old code","Encrypting data"],ans:1,exp:"Inheritance allows a child class to inherit properties and methods from a parent class."}
+],
+hard:[
+  {q:"The P vs NP problem asks whether every problem whose solution can be quickly verified can also be:",opts:["Solved in polynomial time","Solved by a quantum computer","Expressed as a graph","Compressed without data loss"],ans:0,exp:"P vs NP asks if NP problems (verifiable in polynomial time) can also be solved in polynomial time. Unsolved."},
+  {q:"Dijkstra's algorithm finds:",opts:["The shortest path in a graph","The maximum spanning tree","Prime numbers","Sorted arrays"],ans:0,exp:"Dijkstra's algorithm finds the shortest path from a source to all other nodes in a weighted graph."},
+  {q:"RSA encryption relies on the difficulty of:",opts:["Solving differential equations","Factoring large prime numbers","Computing square roots","Sorting algorithms"],ans:1,exp:"RSA security relies on the mathematical difficulty of factoring the product of two very large primes."},
+  {q:"'Deadlock' in operating systems is:",opts:["A crashed program","Processes waiting forever for resources held by each other","A hardware failure","A memory overflow"],ans:1,exp:"Deadlock: two or more processes each hold a resource and wait for the other's resource indefinitely."},
+  {q:"The CAP Theorem says a distributed system can only guarantee two of:",opts:["Speed, Security, Scalability","Consistency, Availability, Partition Tolerance","Concurrency, Atomicity, Performance","Caching, Archiving, Processing"],ans:1,exp:"CAP Theorem: a distributed system can guarantee at most two of Consistency, Availability, and Partition Tolerance."}
+]}
 };
 
-/* Stars */
+const DIFF=[
+  {key:"easy",  label:"Easy",  emoji:"🟢",desc:"Build your foundation. Perfect for beginners.",      color:"#34d399",xp:5},
+  {key:"medium",label:"Medium",emoji:"🟡",desc:"Test your knowledge. Things get interesting.",        color:"#fbbf24",xp:10},
+  {key:"hard",  label:"Hard",  emoji:"🔴",desc:"Expert level. Only the bold attempt this.",           color:"#f87171",xp:20},
+];
+
 function initStars(){
-  const c=document.getElementById("sc"); if(!c)return;
+  const c=document.getElementById("sc");if(!c)return;
   const ctx=c.getContext("2d");
-  const resize=()=>{c.width=window.innerWidth;c.height=window.innerHeight;};
-  resize(); window.addEventListener("resize",resize);
-  const stars=Array.from({length:200},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.3+.2,a:Math.random()*.6+.1,da:(Math.random()-.5)*.015}));
+  const r=()=>{c.width=window.innerWidth;c.height=window.innerHeight;};
+  r();window.addEventListener("resize",r);
+  const s=Array.from({length:200},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.3+.2,a:Math.random()*.6+.1,da:(Math.random()-.5)*.015}));
   let id;
-  const draw=()=>{
-    ctx.clearRect(0,0,c.width,c.height);
-    stars.forEach(s=>{ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${s.a})`;ctx.fill();s.a+=s.da;if(s.a>.9||s.a<.05)s.da*=-1;});
-    id=requestAnimationFrame(draw);
-  };
-  draw(); return()=>cancelAnimationFrame(id);
+  const d=()=>{ctx.clearRect(0,0,c.width,c.height);s.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${p.a})`;ctx.fill();p.a+=p.da;if(p.a>.9||p.a<.05)p.da*=-1;});id=requestAnimationFrame(d);};
+  d();return()=>cancelAnimationFrame(id);
 }
 
-function Notif({n}){
-  if(!n)return null;
-  return<div style={{position:"fixed",top:"74px",left:"50%",transform:"translateX(-50%)",zIndex:999,background:`${n.c}18`,border:`1px solid ${n.c}55`,color:n.c,padding:".62rem 1.4rem",borderRadius:"10px",fontSize:".87rem",fontWeight:600,backdropFilter:"blur(12px)",animation:"fadeInDown .3s ease",whiteSpace:"nowrap"}}>{n.m}</div>;
-}
+function Notif({n}){if(!n)return null;return<div style={{position:"fixed",top:"72px",left:"50%",transform:"translateX(-50%)",zIndex:999,background:`${n.c}18`,border:`1px solid ${n.c}55`,color:n.c,padding:".6rem 1.4rem",borderRadius:"10px",fontSize:".87rem",fontWeight:600,backdropFilter:"blur(12px)",animation:"fadeInDown .3s ease",whiteSpace:"nowrap"}}>{n.m}</div>;}
 
-function Nav({user,go,signOut,xp}){
-  return<nav style={{position:"fixed",top:0,left:0,right:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 1.8rem",height:"62px",background:"rgba(7,8,13,.88)",backdropFilter:"blur(20px)",borderBottom:"1px solid rgba(255,255,255,.06)"}}>
-    <div onClick={()=>go(user?"dashboard":"home")} style={{fontFamily:"'Syne',sans-serif",fontSize:"1.35rem",fontWeight:800,letterSpacing:"-.03em",cursor:"pointer",background:"linear-gradient(135deg,#818cf8,#38bdf8)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>StudyVerse ✦</div>
-    <div style={{display:"flex",gap:".7rem",alignItems:"center"}}>
-      {!user?<>
-        <button className="btn-g" onClick={()=>go("auth")} style={{padding:".45rem 1.1rem",fontSize:".84rem"}}>Sign In</button>
-        <button className="btn-p" onClick={()=>go("auth")} style={{padding:".5rem 1.2rem",fontSize:".84rem",animation:"none",background:"linear-gradient(135deg,#818cf8,#38bdf8)"}}>Get Started</button>
-      </>:<>
-        <span style={{fontSize:".8rem",color:"#8b8fa8"}}><span style={{color:"#34d399",fontWeight:700}}>{xp} XP</span></span>
-        <button className="btn-g" onClick={signOut} style={{padding:".4rem 1rem",fontSize:".8rem",color:"#f87171",borderColor:"#f8717145"}}>Sign Out</button>
-      </>}
-    </div>
-  </nav>;
-}
+function Nav({user,go,signOut,xp}){return<nav style={{position:"fixed",top:0,left:0,right:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 1.8rem",height:"62px",background:"rgba(7,8,13,.9)",backdropFilter:"blur(20px)",borderBottom:"1px solid rgba(255,255,255,.06)"}}>
+  <div onClick={()=>go(user?"dashboard":"home")} style={{fontFamily:"'Syne',sans-serif",fontSize:"1.35rem",fontWeight:800,letterSpacing:"-.03em",cursor:"pointer",background:"linear-gradient(135deg,#818cf8,#38bdf8)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>StudyVerse ✦</div>
+  <div style={{display:"flex",gap:".7rem",alignItems:"center"}}>
+    {!user?<>
+      <button className="btn-g" onClick={()=>go("auth")} style={{padding:".45rem 1.1rem",fontSize:".84rem"}}>Sign In</button>
+      <button className="btn-p" onClick={()=>go("auth")} style={{padding:".5rem 1.2rem",fontSize:".84rem",animation:"none",background:"linear-gradient(135deg,#818cf8,#38bdf8)"}}>Get Started</button>
+    </>:<>
+      <span style={{fontSize:".8rem"}}><span style={{color:"#34d399",fontWeight:700}}>{xp} XP</span></span>
+      <button className="btn-g" onClick={signOut} style={{padding:".4rem 1rem",fontSize:".8rem",color:"#f87171",borderColor:"#f8717145"}}>Sign Out</button>
+    </>}
+  </div>
+</nav>;}
 
-function CatCard({cat,onClick,pts}){
-  return<div className="cat-card" onClick={onClick} style={{position:"relative",background:cat.bg,border:`1px solid ${cat.color}28`,borderRadius:"16px",padding:"1.6rem",cursor:"pointer",boxShadow:"0 4px 22px rgba(0,0,0,.45)"}}>
-    <div className="glow" style={{position:"absolute",inset:0,borderRadius:"16px",background:`radial-gradient(circle at 30% 30%,${cat.color}18,transparent 70%)`,opacity:0,transition:"opacity .3s"}}/>
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:".7rem"}}>
-      <span style={{fontSize:"1.9rem"}}>{cat.icon}</span>
-      {pts>0&&<span style={{fontSize:".7rem",fontWeight:700,color:cat.color,background:`${cat.color}18`,padding:".2rem .6rem",borderRadius:"100px",border:`1px solid ${cat.color}35`}}>{pts*10} XP</span>}
-    </div>
-    <div style={{fontSize:".68rem",color:cat.color,fontWeight:700,letterSpacing:".1em",marginBottom:".25rem",textTransform:"uppercase"}}>{cat.parent}</div>
-    <h3 style={{fontFamily:"'Syne',sans-serif",fontSize:"1.2rem",fontWeight:800,marginBottom:".45rem"}}>{cat.name}</h3>
-    <p style={{fontSize:".78rem",color:"#7a7f95",lineHeight:1.6,marginBottom:".85rem"}}>{cat.desc.slice(0,70)}…</p>
-    <div style={{display:"flex",flexWrap:"wrap",gap:".35rem"}}>
-      {cat.topics.slice(0,3).map(t=><span key={t} style={{fontSize:".67rem",padding:".22rem .55rem",borderRadius:"100px",background:`${cat.color}15`,color:cat.color,border:`1px solid ${cat.color}30`}}>{t}</span>)}
-    </div>
-    {pts>0&&<div style={{height:"4px",background:"rgba(255,255,255,.08)",borderRadius:"100px",overflow:"hidden",marginTop:".9rem"}}>
-      <div style={{height:"100%",width:`${Math.min(100,(pts/3)*100)}%`,background:cat.color,borderRadius:"100px"}}/>
-    </div>}
-  </div>;
-}
+function Card({cat,pts,onClick}){return<div className="cc" onClick={onClick} style={{position:"relative",background:cat.bg,border:`1px solid ${cat.color}28`,borderRadius:"16px",padding:"1.5rem",cursor:"pointer",boxShadow:"0 4px 22px rgba(0,0,0,.45)"}}>
+  <div className="glow" style={{position:"absolute",inset:0,borderRadius:"16px",background:`radial-gradient(circle at 30% 30%,${cat.color}18,transparent 70%)`,opacity:0,transition:"opacity .3s"}}/>
+  <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:".65rem"}}>
+    <span style={{fontSize:"1.8rem"}}>{cat.icon}</span>
+    {pts>0&&<span style={{fontSize:".7rem",fontWeight:700,color:cat.color,background:`${cat.color}18`,padding:".2rem .6rem",borderRadius:"100px",border:`1px solid ${cat.color}35`}}>{pts} XP</span>}
+  </div>
+  <div style={{fontSize:".67rem",color:cat.color,fontWeight:700,letterSpacing:".1em",marginBottom:".2rem",textTransform:"uppercase"}}>{cat.parent}</div>
+  <h3 style={{fontFamily:"'Syne',sans-serif",fontSize:"1.15rem",fontWeight:800,marginBottom:".4rem"}}>{cat.name}</h3>
+  <p style={{fontSize:".78rem",color:"#7a7f95",lineHeight:1.6,marginBottom:pts>0?".75rem":"0"}}>{cat.desc.slice(0,65)}…</p>
+  {pts>0&&<div style={{height:"4px",background:"rgba(255,255,255,.08)",borderRadius:"100px",overflow:"hidden"}}>
+    <div style={{height:"100%",width:`${Math.min(100,(pts/200)*100)}%`,background:cat.color,borderRadius:"100px"}}/>
+  </div>}
+</div>;}
 
-function Home({go}){
-  return<div className="page" style={{minHeight:"100vh"}}>
-    <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",textAlign:"center",padding:"7rem 1.5rem 3rem"}}>
-      <div className="anim-a" style={{display:"inline-flex",alignItems:"center",gap:".5rem",background:"rgba(129,140,248,.1)",border:"1px solid rgba(129,140,248,.3)",borderRadius:"100px",padding:".38rem 1rem",marginBottom:"2rem",fontSize:".74rem",color:"#818cf8",fontWeight:700,letterSpacing:".1em"}}>✦ &nbsp; KNOWLEDGE FOR THE NEW GENERATION</div>
-      <h1 className="anim-b" style={{fontFamily:"'Syne',sans-serif",fontSize:"clamp(2.8rem,8vw,6.5rem)",fontWeight:800,lineHeight:.93,letterSpacing:"-.04em",marginBottom:"1.4rem"}}>
-        <span style={{color:"#e8eaf0"}}>Learn anything.</span><br/>
-        <span style={{background:"linear-gradient(135deg,#818cf8 0%,#38bdf8 50%,#34d399 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>Master everything.</span>
-      </h1>
-      <p className="anim-c" style={{maxWidth:"500px",fontSize:"1.05rem",color:"#8b8fa8",lineHeight:1.75,marginBottom:"2.4rem"}}>Pick a subject. Dive deep. Track your progress. StudyVerse makes learning feel like an exploration, not a chore.</p>
-      <div className="anim-d" style={{display:"flex",gap:"1rem",flexWrap:"wrap",justifyContent:"center"}}>
-        <button className="btn-p" onClick={()=>go("auth")}>Start Learning Free →</button>
-        <button className="btn-g" onClick={()=>document.getElementById("cats")?.scrollIntoView({behavior:"smooth"})}>Browse Subjects</button>
-      </div>
-      <div className="anim-d" style={{display:"flex",gap:"3rem",marginTop:"4rem",flexWrap:"wrap",justifyContent:"center"}}>
-        {[["8+","Subjects"],["200+","Quiz Questions"],["Free","Forever"]].map(([n,l])=><div key={l} style={{textAlign:"center"}}>
-          <div style={{fontFamily:"'Syne',sans-serif",fontSize:"2rem",fontWeight:800,background:"linear-gradient(135deg,#818cf8,#38bdf8)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{n}</div>
-          <div style={{fontSize:".75rem",color:"#6b6f80",letterSpacing:".08em",marginTop:".2rem",textTransform:"uppercase"}}>{l}</div>
-        </div>)}
-      </div>
+function Home({go}){return<div className="page">
+  <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",textAlign:"center",padding:"7rem 1.5rem 3rem"}}>
+    <div className="anim-a" style={{display:"inline-flex",alignItems:"center",gap:".5rem",background:"rgba(129,140,248,.1)",border:"1px solid rgba(129,140,248,.3)",borderRadius:"100px",padding:".38rem 1rem",marginBottom:"2rem",fontSize:".74rem",color:"#818cf8",fontWeight:700,letterSpacing:".1em"}}>✦ &nbsp; KNOWLEDGE FOR THE NEW GENERATION</div>
+    <h1 className="anim-b" style={{fontFamily:"'Syne',sans-serif",fontSize:"clamp(2.8rem,8vw,6.5rem)",fontWeight:800,lineHeight:.93,letterSpacing:"-.04em",marginBottom:"1.4rem"}}>
+      <span style={{color:"#e8eaf0"}}>Learn anything.</span><br/>
+      <span style={{background:"linear-gradient(135deg,#818cf8 0%,#38bdf8 50%,#34d399 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>Master everything.</span>
+    </h1>
+    <p className="anim-c" style={{maxWidth:"520px",fontSize:"1.05rem",color:"#8b8fa8",lineHeight:1.75,marginBottom:"2.4rem"}}>14 subjects. 3 difficulty levels. Real questions. Real progress. StudyVerse makes learning feel like exploration.</p>
+    <div className="anim-d" style={{display:"flex",gap:"1rem",flexWrap:"wrap",justifyContent:"center"}}>
+      <button className="btn-p" onClick={()=>go("auth")}>Start Learning Free →</button>
+      <button className="btn-g" onClick={()=>document.getElementById("cats")?.scrollIntoView({behavior:"smooth"})}>Browse 14 Subjects</button>
     </div>
-    <div id="cats" style={{padding:"2rem 1.5rem 6rem",maxWidth:"1200px",margin:"0 auto"}}>
-      <div style={{textAlign:"center",marginBottom:"2.5rem"}}>
-        <h2 style={{fontFamily:"'Syne',sans-serif",fontSize:"clamp(1.7rem,4vw,2.6rem)",fontWeight:800,letterSpacing:"-.03em",marginBottom:".5rem"}}>Choose Your Path</h2>
-        <p style={{color:"#8b8fa8"}}>Eight worlds of knowledge, each one waiting for you</p>
-      </div>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(255px,1fr))",gap:"1.1rem"}}>
-        {CATS.map(cat=><CatCard key={cat.id} cat={cat} pts={0} onClick={()=>go("auth")}/>)}
-      </div>
+    <div className="anim-d" style={{display:"flex",gap:"2.5rem",marginTop:"3.5rem",flexWrap:"wrap",justifyContent:"center"}}>
+      {[["14","Subjects"],["500+","Questions"],["3","Difficulty Levels"],["Free","Forever"]].map(([n,l])=><div key={l} style={{textAlign:"center"}}>
+        <div style={{fontFamily:"'Syne',sans-serif",fontSize:"1.8rem",fontWeight:800,background:"linear-gradient(135deg,#818cf8,#38bdf8)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{n}</div>
+        <div style={{fontSize:".72rem",color:"#6b6f80",letterSpacing:".08em",marginTop:".2rem",textTransform:"uppercase"}}>{l}</div>
+      </div>)}
     </div>
-  </div>;
-}
+  </div>
+  <div id="cats" style={{padding:"2rem 1.5rem 6rem",maxWidth:"1300px",margin:"0 auto"}}>
+    <div style={{textAlign:"center",marginBottom:"2.5rem"}}>
+      <h2 style={{fontFamily:"'Syne',sans-serif",fontSize:"clamp(1.7rem,4vw,2.6rem)",fontWeight:800,letterSpacing:"-.03em",marginBottom:".5rem"}}>Choose Your Path</h2>
+      <p style={{color:"#8b8fa8"}}>14 worlds of knowledge — from the cosmos to the canvas</p>
+    </div>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))",gap:"1rem"}}>
+      {CATS.map(cat=><Card key={cat.id} cat={cat} pts={0} onClick={()=>go("auth")}/>)}
+    </div>
+  </div>
+</div>;}
 
 function Auth({onAuth}){
   const[mode,setMode]=useState("signup");
@@ -234,13 +483,9 @@ function Auth({onAuth}){
           <label style={{fontSize:".74rem",color:"#8b8fa8",fontWeight:600,display:"block",marginBottom:".4rem"}}>PASSWORD</label>
           <input type="password" value={form.password} onChange={e=>upd("password",e.target.value)} placeholder="••••••••"/>
         </div>
-        <button className="btn-p" style={{width:"100%",padding:".9rem",animation:"none",background:"linear-gradient(135deg,#818cf8,#38bdf8)"}} onClick={()=>onAuth(form,mode)}>
-          {mode==="signin"?"Sign In →":"Create Account →"}
-        </button>
+        <button className="btn-p" style={{width:"100%",padding:".9rem",animation:"none",background:"linear-gradient(135deg,#818cf8,#38bdf8)"}} onClick={()=>onAuth(form,mode)}>{mode==="signin"?"Sign In →":"Create Account →"}</button>
         <div style={{textAlign:"center",marginTop:"1.1rem"}}>
-          <button onClick={()=>onAuth({name:"Demo User",email:"demo@studyverse.app",password:"x"},mode)} style={{background:"none",border:"none",color:"#818cf8",fontSize:".82rem",cursor:"pointer",textDecoration:"underline",fontFamily:"'DM Sans',sans-serif"}}>
-            Try demo (no sign up needed)
-          </button>
+          <button onClick={()=>onAuth({name:"Demo User",email:"demo@studyverse.app",password:"x"},mode)} style={{background:"none",border:"none",color:"#818cf8",fontSize:".82rem",cursor:"pointer",textDecoration:"underline",fontFamily:"'DM Sans',sans-serif"}}>Try demo — no sign up needed</button>
         </div>
       </div>
     </div>
@@ -248,117 +493,117 @@ function Auth({onAuth}){
 }
 
 function Dashboard({user,progress,goStudy}){
-  const xp=Object.values(progress).reduce((a,b)=>a+b,0)*10;
-  const started=Object.keys(progress).length;
-  return<div className="page" style={{minHeight:"100vh",padding:"5.5rem 1.5rem 4rem",maxWidth:"1200px",margin:"0 auto"}}>
-    <div style={{marginBottom:"2.2rem"}}>
+  const xp=Object.values(progress).reduce((a,b)=>a+b,0);
+  const started=Object.keys(progress).filter(k=>progress[k]>0).length;
+  const level=Math.floor(xp/100)+1;
+  return<div className="page" style={{minHeight:"100vh",padding:"5.5rem 1.5rem 4rem",maxWidth:"1300px",margin:"0 auto"}}>
+    <div style={{marginBottom:"2rem"}}>
       <div style={{fontSize:".74rem",color:"#818cf8",fontWeight:700,letterSpacing:".1em",marginBottom:".3rem"}}>WELCOME BACK</div>
       <h2 style={{fontFamily:"'Syne',sans-serif",fontSize:"clamp(1.7rem,4vw,2.4rem)",fontWeight:800,letterSpacing:"-.03em"}}>{user.name} ✦</h2>
     </div>
-    <div style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",borderRadius:"16px",padding:"1.4rem 1.6rem",marginBottom:"2rem"}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"1rem",flexWrap:"wrap",gap:"1rem"}}>
-        <div>
-          <div style={{fontSize:".74rem",color:"#8b8fa8",fontWeight:600,marginBottom:".2rem"}}>TOTAL XP EARNED</div>
-          <div style={{fontFamily:"'Syne',sans-serif",fontSize:"2.2rem",fontWeight:800,background:"linear-gradient(135deg,#818cf8,#34d399)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{xp} XP</div>
-        </div>
-        <div style={{textAlign:"right"}}>
-          <div style={{fontSize:".74rem",color:"#8b8fa8",fontWeight:600,marginBottom:".2rem"}}>SUBJECTS STARTED</div>
-          <div style={{fontSize:"1.6rem",fontWeight:800}}>{started} / {CATS.length}</div>
-        </div>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:"1rem",marginBottom:"1.5rem"}}>
+      {[{l:"TOTAL XP",v:xp,c:"#818cf8"},{l:"LEVEL",v:`Lv. ${level}`,c:"#34d399"},{l:"SUBJECTS",v:`${started}/${CATS.length}`,c:"#38bdf8"}].map(s=><div key={s.l} style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.07)",borderRadius:"14px",padding:"1.1rem 1.3rem"}}>
+        <div style={{fontSize:".67rem",color:"#8b8fa8",fontWeight:700,letterSpacing:".08em",marginBottom:".3rem"}}>{s.l}</div>
+        <div style={{fontFamily:"'Syne',sans-serif",fontSize:"1.6rem",fontWeight:800,color:s.c}}>{s.v}</div>
+      </div>)}
+    </div>
+    <div style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.07)",borderRadius:"14px",padding:"1rem 1.3rem",marginBottom:"2rem"}}>
+      <div style={{display:"flex",justifyContent:"space-between",fontSize:".76rem",color:"#8b8fa8",marginBottom:".5rem"}}>
+        <span>Level {level}</span><span>{xp%100}/100 XP to Level {level+1}</span>
       </div>
-      <div style={{height:"6px",background:"rgba(255,255,255,.08)",borderRadius:"100px",overflow:"hidden"}}>
-        <div style={{height:"100%",width:`${Math.min(100,(started/CATS.length)*100)}%`,background:"linear-gradient(90deg,#818cf8,#38bdf8,#34d399)",borderRadius:"100px",transition:"width 1s ease"}}/>
+      <div style={{height:"8px",background:"rgba(255,255,255,.08)",borderRadius:"100px",overflow:"hidden"}}>
+        <div style={{height:"100%",width:`${xp%100}%`,background:"linear-gradient(90deg,#818cf8,#38bdf8,#34d399)",borderRadius:"100px",transition:"width 1s ease"}}/>
       </div>
     </div>
-    <h3 style={{fontFamily:"'Syne',sans-serif",fontSize:"1.1rem",fontWeight:800,marginBottom:"1.1rem"}}>All Subjects</h3>
-    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(255px,1fr))",gap:"1.1rem"}}>
-      {CATS.map(cat=><CatCard key={cat.id} cat={cat} pts={progress[cat.id]||0} onClick={()=>goStudy(cat)}/>)}
+    <h3 style={{fontFamily:"'Syne',sans-serif",fontSize:"1.1rem",fontWeight:800,marginBottom:"1rem"}}>All Subjects</h3>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))",gap:"1rem"}}>
+      {CATS.map(cat=><Card key={cat.id} cat={cat} pts={progress[cat.id]||0} onClick={()=>goStudy(cat)}/>)}
     </div>
   </div>;
 }
 
-function Study({cat,go,startQuiz}){
+function Study({cat,go,onXP}){
+  const[diff,setDiff]=useState(null);
   if(!cat)return null;
-  return<div className="page" style={{minHeight:"100vh",padding:"5.5rem 1.5rem 3rem",maxWidth:"860px",margin:"0 auto"}}>
+  if(diff)return<Quiz cat={cat} diff={diff} go={go} onBack={()=>setDiff(null)} onXP={onXP}/>;
+  return<div className="page" style={{minHeight:"100vh",padding:"5.5rem 1.5rem 3rem",maxWidth:"800px",margin:"0 auto"}}>
     <button onClick={()=>go("dashboard")} style={{background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.1)",borderRadius:"8px",color:"#8b8fa8",padding:".45rem .95rem",cursor:"pointer",marginBottom:"2rem",fontSize:".84rem",fontFamily:"'DM Sans',sans-serif"}}>← Back</button>
-    <div style={{display:"flex",alignItems:"center",gap:"1.1rem",marginBottom:"1.8rem"}}>
-      <div style={{fontSize:"3.2rem"}}>{cat.icon}</div>
+    <div style={{display:"flex",alignItems:"center",gap:"1.1rem",marginBottom:"1.5rem"}}>
+      <div style={{fontSize:"3rem"}}>{cat.icon}</div>
       <div>
         <div style={{fontSize:".72rem",color:cat.color,fontWeight:700,letterSpacing:".1em",textTransform:"uppercase"}}>{cat.parent}</div>
         <h2 style={{fontFamily:"'Syne',sans-serif",fontSize:"clamp(1.5rem,4vw,2.2rem)",fontWeight:800}}>{cat.name}</h2>
       </div>
     </div>
-    <p style={{color:"#9da2b8",lineHeight:1.8,marginBottom:"2.5rem",fontSize:"1rem",maxWidth:"580px",borderLeft:`3px solid ${cat.color}`,paddingLeft:"1rem"}}>{cat.desc}</p>
-    <h3 style={{fontFamily:"'Syne',sans-serif",fontSize:"1.05rem",fontWeight:800,marginBottom:"1rem"}}>Topics to Explore</h3>
-    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(190px,1fr))",gap:".75rem",marginBottom:"2.5rem"}}>
-      {cat.topics.map(t=><div key={t} style={{padding:".95rem 1rem",background:`${cat.color}12`,border:`1px solid ${cat.color}28`,borderRadius:"12px",fontSize:".88rem",fontWeight:500}}><span style={{color:cat.color,marginRight:".4rem"}}>→</span>{t}</div>)}
+    <p style={{color:"#9da2b8",lineHeight:1.8,marginBottom:"2.5rem",borderLeft:`3px solid ${cat.color}`,paddingLeft:"1rem"}}>{cat.desc}</p>
+    <h3 style={{fontFamily:"'Syne',sans-serif",fontSize:"1.1rem",fontWeight:800,marginBottom:"1rem"}}>Choose Difficulty</h3>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",gap:"1rem"}}>
+      {DIFF.map(d=><div key={d.key} className="cc" onClick={()=>setDiff(d.key)} style={{position:"relative",background:"rgba(255,255,255,.04)",border:`2px solid ${d.color}35`,borderRadius:"16px",padding:"1.5rem",cursor:"pointer",textAlign:"center"}}>
+        <div className="glow" style={{position:"absolute",inset:0,borderRadius:"16px",background:`radial-gradient(circle at 50% 0%,${d.color}15,transparent 70%)`,opacity:0,transition:"opacity .3s"}}/>
+        <div style={{fontSize:"2rem",marginBottom:".6rem"}}>{d.emoji}</div>
+        <div style={{fontFamily:"'Syne',sans-serif",fontSize:"1.1rem",fontWeight:800,color:d.color,marginBottom:".35rem"}}>{d.label}</div>
+        <p style={{fontSize:".78rem",color:"#7a7f95",lineHeight:1.5,marginBottom:".7rem"}}>{d.desc}</p>
+        <div style={{fontSize:".75rem",color:d.color,fontWeight:600}}>5 Questions · +{d.xp} XP each →</div>
+      </div>)}
     </div>
-    <button className="btn-p" onClick={startQuiz} style={{padding:"1rem 2.5rem",fontSize:"1rem",boxShadow:`0 0 30px ${cat.color}45`}}>🎯 &nbsp; Start Quiz</button>
   </div>;
 }
 
-function Quiz({cat,go,onComplete}){
+function Quiz({cat,diff,go,onBack,onXP}){
+  const di=DIFF.find(d=>d.key===diff)||DIFF[0];
+  const qs=(QUESTIONS[cat.id]||{})[diff]||[];
   const[idx,setIdx]=useState(0);
   const[sel,setSel]=useState(null);
-  const[ans,setAns]=useState(false);
+  const[answered,setAnswered]=useState(false);
   const[score,setScore]=useState(0);
   const[done,setDone]=useState(false);
-  if(!cat)return null;
-  const qs=QUIZ[cat.id]||[{q:`Sample for ${cat.id}`,opts:["A","B","C","D"],ans:0,exp:"Sample."}];
+  if(!qs.length)return<div className="page" style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",textAlign:"center",padding:"2rem"}}><div><p style={{color:"#8b8fa8",marginBottom:"1rem"}}>Questions coming soon!</p><button className="btn-g" onClick={onBack}>Go Back</button></div></div>;
   const q=qs[idx];
-
-  const pick=(i)=>{
-    if(ans)return;
-    setSel(i);setAns(true);
-    if(i===q.ans)setScore(s=>s+1);
-  };
+  const pick=(i)=>{if(answered)return;setSel(i);setAnswered(true);if(i===q.ans)setScore(s=>s+1);};
+  const earned=()=>score*di.xp;
   const next=()=>{
-    if(idx+1>=qs.length){onComplete(cat.id,score);setDone(true);}
-    else{setIdx(i=>i+1);setSel(null);setAns(false);}
+    if(idx+1>=qs.length){onXP(cat.id,earned());setDone(true);}
+    else{setIdx(i=>i+1);setSel(null);setAnswered(false);}
   };
-
   if(done)return<div className="page" style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"2rem",textAlign:"center"}}>
     <div style={{fontSize:"4.5rem",marginBottom:"1rem",animation:"pulse 1.5s ease infinite"}}>{score===qs.length?"🏆":score>=qs.length/2?"⭐":"📚"}</div>
     <h2 style={{fontFamily:"'Syne',sans-serif",fontSize:"2rem",fontWeight:800,marginBottom:".5rem"}}>Quiz Complete!</h2>
+    <div style={{display:"inline-flex",alignItems:"center",gap:".4rem",background:`${di.color}18`,border:`1px solid ${di.color}40`,borderRadius:"100px",padding:".3rem .9rem",marginBottom:"1rem",fontSize:".82rem",color:di.color,fontWeight:700}}>{di.emoji} {di.label}</div>
     <p style={{color:"#8b8fa8",marginBottom:".4rem"}}>You scored <span style={{color:cat.color,fontWeight:700}}>{score}/{qs.length}</span> on {cat.name}</p>
-    <p style={{color:"#34d399",fontWeight:600,marginBottom:"2rem",fontSize:".9rem"}}>+{score*10} XP earned!</p>
+    <p style={{color:"#34d399",fontWeight:700,fontSize:"1.1rem",marginBottom:"2rem"}}>+{earned()} XP earned!</p>
     <div style={{display:"flex",gap:"1rem",flexWrap:"wrap",justifyContent:"center"}}>
-      <button className="btn-p" onClick={()=>{setIdx(0);setSel(null);setAns(false);setScore(0);setDone(false);}}>Try Again</button>
+      <button className="btn-p" onClick={()=>{setIdx(0);setSel(null);setAnswered(false);setScore(0);setDone(false);}}>Try Again</button>
+      <button className="btn-g" onClick={onBack}>Other Difficulty</button>
       <button className="btn-g" onClick={()=>go("dashboard")}>Dashboard</button>
     </div>
   </div>;
-
   return<div className="page" style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"5rem 1.5rem 2rem"}}>
     <div style={{width:"100%",maxWidth:"560px"}}>
-      <div style={{display:"flex",justifyContent:"space-between",fontSize:".78rem",color:"#8b8fa8",marginBottom:".4rem"}}>
-        <span>{cat.icon} {cat.name}</span><span>Question {idx+1}/{qs.length}</span>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",fontSize:".78rem",color:"#8b8fa8",marginBottom:".4rem"}}>
+        <span>{cat.icon} {cat.name} <span style={{color:di.color,fontWeight:700}}>{di.emoji} {di.label}</span></span>
+        <span>{idx+1}/{qs.length}</span>
       </div>
       <div style={{height:"4px",background:"rgba(255,255,255,.08)",borderRadius:"100px",overflow:"hidden",marginBottom:"2rem"}}>
-        <div style={{height:"100%",width:`${(idx/qs.length)*100}%`,background:cat.color,borderRadius:"100px",transition:"width .5s"}}/>
+        <div style={{height:"100%",width:`${(idx/qs.length)*100}%`,background:di.color,borderRadius:"100px",transition:"width .5s"}}/>
       </div>
       <div style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",borderRadius:"18px",padding:"1.8rem",marginBottom:"1.4rem"}}>
-        <h3 style={{fontFamily:"'Syne',sans-serif",fontSize:"1.2rem",fontWeight:700,lineHeight:1.45}}>{q.q}</h3>
+        <h3 style={{fontFamily:"'Syne',sans-serif",fontSize:"1.15rem",fontWeight:700,lineHeight:1.45}}>{q.q}</h3>
       </div>
       <div style={{display:"flex",flexDirection:"column",gap:".75rem",marginBottom:"1.4rem"}}>
         {q.opts.map((opt,i)=>{
           let bg="rgba(255,255,255,.04)",border="1px solid rgba(255,255,255,.1)",color="#e8eaf0";
-          if(ans){
-            if(i===q.ans){bg=`${cat.color}22`;border=`1px solid ${cat.color}`;color=cat.color;}
-            else if(i===sel&&i!==q.ans){bg="rgba(248,113,113,.15)";border="1px solid #f87171";color="#f87171";}
-          }
-          return<button key={i} className="opt" disabled={ans} onClick={()=>pick(i)} style={{background:bg,border,color}}>
+          if(answered){if(i===q.ans){bg=`${di.color}22`;border=`1px solid ${di.color}`;color=di.color;}else if(i===sel&&i!==q.ans){bg="rgba(248,113,113,.15)";border="1px solid #f87171";color="#f87171";}}
+          return<button key={i} className="opt" disabled={answered} onClick={()=>pick(i)} style={{background:bg,border,color}}>
             <span style={{width:"24px",height:"24px",borderRadius:"50%",background:"rgba(255,255,255,.1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:".72rem",fontWeight:700,flexShrink:0}}>{["A","B","C","D"][i]}</span>
             {opt}
           </button>;
         })}
       </div>
-      {ans&&<div style={{animation:"fadeIn .4s ease"}}>
-        <div style={{padding:"1rem",background:`${cat.color}12`,border:`1px solid ${cat.color}28`,borderRadius:"12px",fontSize:".84rem",color:"#c5c8d6",lineHeight:1.7,marginBottom:"1rem"}}>
-          <span style={{color:cat.color,fontWeight:700}}>💡 Explanation: </span>{q.exp}
+      {answered&&<div style={{animation:"fadeIn .4s ease"}}>
+        <div style={{padding:"1rem",background:`${di.color}12`,border:`1px solid ${di.color}28`,borderRadius:"12px",fontSize:".84rem",color:"#c5c8d6",lineHeight:1.7,marginBottom:"1rem"}}>
+          <span style={{color:di.color,fontWeight:700}}>💡 </span>{q.exp}
         </div>
-        <button className="btn-p" style={{width:"100%",padding:".9rem",fontSize:".95rem"}} onClick={next}>
-          {idx+1>=qs.length?"See Results →":"Next Question →"}
-        </button>
+        <button className="btn-p" style={{width:"100%",padding:".9rem",fontSize:".95rem"}} onClick={next}>{idx+1>=qs.length?"See Results →":"Next Question →"}</button>
       </div>}
     </div>
   </div>;
@@ -370,12 +615,9 @@ function App(){
   const[cat,setCat]=useState(null);
   const[progress,setProgress]=useState({});
   const[notif,setNotif]=useState(null);
-
   useEffect(()=>initStars(),[]);
-
   const go=(p)=>{window.scrollTo({top:0,behavior:"smooth"});setPage(p);};
   const showN=(m,c="#34d399")=>{setNotif({m,c});setTimeout(()=>setNotif(null),2600);};
-
   const handleAuth=(form,mode)=>{
     if(!form.email){showN("Please enter your email","#f87171");return;}
     setUser({name:form.name||"Learner",email:form.email});
@@ -383,20 +625,17 @@ function App(){
     showN(mode==="signup"?"Welcome to StudyVerse! 🎉":"Welcome back! 👋");
   };
   const signOut=()=>{setUser(null);setProgress({});setCat(null);go("home");showN("Signed out","#818cf8");};
-  const onComplete=(catId,s)=>{setProgress(p=>({...p,[catId]:(p[catId]||0)+1}));};
-  const xp=Object.values(progress).reduce((a,b)=>a+b,0)*10;
-
+  const onXP=(catId,xp)=>{setProgress(p=>({...p,[catId]:(p[catId]||0)+xp}));showN(`+${xp} XP earned! 🎉`,"#34d399");};
+  const xp=Object.values(progress).reduce((a,b)=>a+b,0);
   return<>
     <Notif n={notif}/>
     <Nav user={user} go={go} signOut={signOut} xp={xp}/>
     {page==="home"&&<Home go={go}/>}
     {page==="auth"&&<Auth onAuth={handleAuth}/>}
     {page==="dashboard"&&user&&<Dashboard user={user} progress={progress} goStudy={c=>{setCat(c);go("study");}}/>}
-    {page==="study"&&user&&<Study cat={cat} go={go} startQuiz={()=>go("quiz")}/>}
-    {page==="quiz"&&user&&<Quiz cat={cat} go={go} onComplete={onComplete}/>}
+    {page==="study"&&user&&<Study cat={cat} go={go} onXP={onXP}/>}
   </>;
 }
-
 ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 </body>
